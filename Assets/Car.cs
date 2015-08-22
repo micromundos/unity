@@ -10,18 +10,19 @@ public class Car : MonoBehaviour {
     public Vector3 direction;
     public Vector3 rotation;
     public float smoothRotation;
-    public float floorHeight;    
+    public float floorHeight;
+
+    private Teletransportable teletransportable;
 
 	void Start () {
-        //pasa a kilometros
-        //maxSpeed /= 100;
+        teletransportable = GetComponent<Teletransportable>();
 	}
 
 	void Update () {
 
         Vector3 pos = transform.position ;
         Vector3 frontPosition = pos;
-        CheckCenterHit(frontPosition, Color.red);
+        
 
         Vector3 leftPosition = (pos + transform.up/10) + transform.right / 10;
         CheckBorderHit(leftPosition, Color.blue, "left");
@@ -37,7 +38,8 @@ public class Car : MonoBehaviour {
 
         Vector3 rot = transform.localEulerAngles;
         rot = transform.localEulerAngles - rotation;
-       // transform.localEulerAngles = rot;
+
+        CheckCenterHit(frontPosition, Color.red);
 	}
     void CheckCenterHit(Vector3 coord, Color DebugColor)
     {
@@ -57,6 +59,9 @@ public class Car : MonoBehaviour {
                 if (Mathf.Abs(transform.localEulerAngles.z - hit.transform.localEulerAngles.z) > 1)
                     speed /= 1.2f;
                 transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
+                break;
+            case "Tele1":
+                teletransportable.SetOn(hit.transform.localPosition);
                 break;
         }
     }
