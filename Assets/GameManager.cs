@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     public Camera cam;
     static GameManager mInstance = null;
     public int totalCars;
+	public SyphonParser	syphon_parser;
 
     public static GameManager Instance
     {
@@ -44,24 +45,36 @@ public class GameManager : MonoBehaviour {
 	}
     public float GetFloorHeight(RaycastHit hit )
     {
-        Renderer rend = hit.transform.GetComponent<Renderer>();
-        MeshCollider meshCollider = hit.collider as MeshCollider;
+  //      Renderer rend = hit.transform.GetComponent<Renderer>();
+  //      MeshCollider meshCollider = hit.collider as MeshCollider;
+		/*
         if (rend == null || rend.sharedMaterial == null || rend.sharedMaterial.mainTexture == null || meshCollider == null)
             return 0;
+*/
 
-        Texture2D tex = rend.material.mainTexture as Texture2D;
-        Vector2 pixelUV = hit.textureCoord;
-        pixelUV.x *= tex.width;
-        pixelUV.y *= tex.height;
-        Color color = tex.GetPixel((int)pixelUV.x, (int)pixelUV.y);
-        return color.r + color.g + color.b;
+		if (syphon_parser != null) {
+			Vector2 pixelUV = hit.textureCoord;
+			pixelUV.x *= syphon_parser.SurfaceMap().width;
+			pixelUV.y *= syphon_parser.SurfaceMap().height;
+			Color color = syphon_parser.SurfaceMap().GetPixel ((int)pixelUV.x, (int)pixelUV.y);
+			return color.r + color.g + color.b;
+		} else {
+			return 0;
+		}
+
+		//return 0;
+	
         // tex.SetPixel((int)pixelUV.x, (int)pixelUV.y, Color.red);
         //tex.Apply();
     }
+
+
+
     void Updatessssssss() {
-        if (!Input.GetMouseButton(0))
+     
+		if (!Input.GetMouseButton(0))
             return;
-        
+
         RaycastHit hit;
         if (!Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
             return;
