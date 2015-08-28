@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
 
     public Car car;
@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour {
     static GameManager mInstance = null;
     public int totalCars;
 	public SyphonParser	syphon_parser;
+
+	float	delta_time;
+	public	Text	text_field;
 
     public static GameManager Instance
     {
@@ -24,6 +27,7 @@ public class GameManager : MonoBehaviour {
         settings = GetComponent<Settings>();
         Events.AddNewCar += AddNewCar;
         cam = Camera.main;
+		delta_time = 0.0f;
 	}
     void OnDestroy()
     {
@@ -43,14 +47,9 @@ public class GameManager : MonoBehaviour {
         newCar.transform.localScale = new Vector3(1,1,1);
         
 	}
+
     public float GetFloorHeight(RaycastHit hit )
     {
-  //      Renderer rend = hit.transform.GetComponent<Renderer>();
-  //      MeshCollider meshCollider = hit.collider as MeshCollider;
-		/*
-        if (rend == null || rend.sharedMaterial == null || rend.sharedMaterial.mainTexture == null || meshCollider == null)
-            return 0;
-*/
 
 		if (syphon_parser != null) {
 			Vector2 pixelUV = hit.textureCoord;
@@ -62,13 +61,14 @@ public class GameManager : MonoBehaviour {
 			return 0;
 		}
 
-		//return 0;
-	
-        // tex.SetPixel((int)pixelUV.x, (int)pixelUV.y, Color.red);
-        //tex.Apply();
     }
 
-
+	void Update()
+	{
+		delta_time += (Time.deltaTime - delta_time) * 0.1f;
+		float fps = 1.0f / delta_time;
+		text_field.text = fps.ToString ("0.00");
+	}
 
     void Updatessssssss() {
      

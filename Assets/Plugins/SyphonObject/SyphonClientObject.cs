@@ -87,7 +87,7 @@ public class SyphonClientObject : ScriptableObject {
 			boundName = server.SyphonServerDescriptionName;		
 		//initialize the texture
 		if(attachedTexture == null){
-			attachedTexture = new RenderTexture(16, 16, 0, RenderTextureFormat.ARGB32);
+			attachedTexture = new RenderTexture(16, 16, 0, RenderTextureFormat.ARGBFloat);
 			attachedTexture.filterMode = FilterMode.Bilinear;
 			attachedTexture.wrapMode = TextureWrapMode.Clamp;
 			attachedTexture.Create();
