@@ -8,7 +8,9 @@ public class CarCreator : MonoBehaviour {
 	}
     void CreateCar()
     {
-        Events.AddNewCar(transform.localPosition, transform.localEulerAngles);
         Invoke("CreateCar", 2);
+        if (transform.localPosition.x > 6) return;
+        Events.AddNewCar(transform.localPosition, transform.localEulerAngles);
+        
     }
 }

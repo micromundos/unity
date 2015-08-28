@@ -48,9 +48,9 @@ public class Car : MonoBehaviour {
         RaycastHit hit = GetCollision(coord, "center");
         if (hit.transform == null) return;
 
-        switch (hit.transform.gameObject.name)
+        switch (hit.transform.gameObject.tag)
         {
-            case "DoblaPared":
+            case "Limite":
                 if (Mathf.Abs(transform.localEulerAngles.z - hit.transform.localEulerAngles.z) > 40)
                     speed /= 1.2f;
                 transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
@@ -62,6 +62,18 @@ public class Car : MonoBehaviour {
                 break;
             case "Tele1":
                 teletransportable.SetOn(hit.transform.localPosition);
+                break;
+            case "Cinta":
+                print("cinta");
+
+                Vector3 pos = transform.position;
+
+                speed += (acceleration);
+                if (speed > maxSpeed) speed = maxSpeed;
+
+                pos += hit.transform.up * speed * Time.deltaTime;
+                transform.position = pos;
+
                 break;
         }
     }

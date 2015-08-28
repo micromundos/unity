@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Dobla : MonoBehaviour {
+public class Cinta : MonoBehaviour {
 
 	void Start () {
 	

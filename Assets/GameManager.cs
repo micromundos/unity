@@ -55,28 +55,5 @@ public class GameManager : MonoBehaviour {
         pixelUV.y *= tex.height;
         Color color = tex.GetPixel((int)pixelUV.x, (int)pixelUV.y);
         return color.r + color.g + color.b;
-        // tex.SetPixel((int)pixelUV.x, (int)pixelUV.y, Color.red);
-        //tex.Apply();
-    }
-    void Updatessssssss() {
-        if (!Input.GetMouseButton(0))
-            return;
-        
-        RaycastHit hit;
-        if (!Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
-            return;
-        
-        Renderer rend = hit.transform.GetComponent<Renderer>();
-        MeshCollider meshCollider = hit.collider as MeshCollider;
-        if (rend == null || rend.sharedMaterial == null || rend.sharedMaterial.mainTexture == null || meshCollider == null)
-            return;
-        
-        Texture2D tex = rend.material.mainTexture as Texture2D;
-        Vector2 pixelUV = hit.textureCoord;
-        pixelUV.x *= tex.width;
-        pixelUV.y *= tex.height;
-        print(tex.GetPixel((int)pixelUV.x, (int)pixelUV.y));
-       // tex.SetPixel((int)pixelUV.x, (int)pixelUV.y, Color.red);
-        //tex.Apply();
     }
 }
