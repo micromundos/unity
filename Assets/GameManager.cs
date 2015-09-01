@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour {
 	{
 		delta_time += (Time.deltaTime - delta_time) * 0.1f;
 		float fps = 1.0f / delta_time;
-		text_field.text = fps.ToString ("0.00");
+//		text_field.text = fps.ToString ("0.00");
 	}
 
     void Updatessssssss() {

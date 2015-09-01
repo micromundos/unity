@@ -5,7 +5,8 @@ using System;
 
 public class Controller : MonoBehaviour {
 
-    public List<ObjectData> ObjectsData;
+    public List<MMTag> ObjectsData;
+	public OSCManager	osc_manager;
 
     [Serializable]
     public class ObjectData
@@ -23,6 +24,7 @@ public class Controller : MonoBehaviour {
 
     void Start()
     {
+		/*
         foreach (ObjectData data in ObjectsData)
         {
             switch (data.id)
@@ -32,11 +34,12 @@ public class Controller : MonoBehaviour {
                 case 3: data.tag = "Tele"; break;
                 case 4: data.tag = "Cinta"; break;
             }
-        }
+        }*/
     }
     string MapId(int id)
     {
         string tag = null;
+		Debug.Log ("TAG " + id.ToString ());
         switch (id)
         {
             case 1: tag = "Creator"; break;
@@ -48,21 +51,24 @@ public class Controller : MonoBehaviour {
     }
     void Update()
     {
+
+		ObjectsData = osc_manager.tags;
+
         foreach (GameObject go in objects)
             go.transform.localPosition = new Vector3(10,0,0);
 
-        foreach (ObjectData data in ObjectsData)
+        foreach (MMTag data in ObjectsData)
         {
-            data.tag = MapId(data.id);
+            data.tag = MapId(Int32.Parse(data.id));
             GameObject go = GetObjectByTag(data);
 
             if (!go) { Debug.Log("FALTA UN " + data.tag); return; }
 
-            go.transform.localPosition = data.position;
-            go.transform.localEulerAngles = new Vector3(0, 0, data.rotation);
+            go.transform.localPosition = new Vector2(data.x,data.y);
+            go.transform.localEulerAngles = new Vector3(0, 0, data.angle);
         }
     }
-    GameObject GetObjectByTag(ObjectData data)
+    GameObject GetObjectByTag(MMTag data)
     {
         foreach (GameObject go in objects)
         {
