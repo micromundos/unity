@@ -5,7 +5,8 @@ using System;
 
 public class Controller : MonoBehaviour {
 
-    public List<ObjectData> ObjectsData;
+    public Vector2 fixedPosition;
+    public List<ObjectData> ObjectsData;    
 
     [Serializable]
     public class ObjectData
@@ -58,7 +59,8 @@ public class Controller : MonoBehaviour {
 
             if (!go) { Debug.Log("FALTA UN " + data.tag); return; }
 
-            go.transform.localPosition = data.position;
+            Vector2 fixedDataPosition = new Vector2(data.position.x * fixedPosition.x, data.position.y * fixedPosition.y);
+            go.transform.localPosition = fixedDataPosition;
             go.transform.localEulerAngles = new Vector3(0, 0, data.rotation);
         }
     }

@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Car : MonoBehaviour {
 
+    public Sprite[] sprites;
     public float pendiente;
     public float speed;
     public float acceleration;
@@ -16,12 +17,14 @@ public class Car : MonoBehaviour {
 
 	void Start () {
         teletransportable = GetComponent<Teletransportable>();
+        GetComponentInChildren<SpriteRenderer>().sprite = sprites[ Random.Range(0, sprites.Length) ];
 	}
 
 	void Update () {
 
         Vector3 pos = transform.position ;
         Vector3 frontPosition = pos;
+        frontPosition += transform.forward / 10;
         
 
         Vector3 leftPosition = (pos + transform.up/10) + transform.right / 10;
@@ -43,7 +46,7 @@ public class Car : MonoBehaviour {
 	}
     void CheckCenterHit(Vector3 coord, Color DebugColor)
     {
-        DebugDraw.DrawSphere(coord, 0.1f, DebugColor);
+      //  DebugDraw.DrawSphere(coord, 0.1f, DebugColor);
 
         RaycastHit hit = GetCollision(coord, "center");
         if (hit.transform == null) return;
@@ -119,7 +122,6 @@ public class Car : MonoBehaviour {
     }
     private void turn(bool right)
     {
-        print("turn " + right);
         Vector3 angles = transform.localEulerAngles;
 
         if (right)
