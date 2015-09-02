@@ -3,11 +3,10 @@ using System.Collections;
 
 public class Dobla : MonoBehaviour {
 
-    public Transform asset;
+    public float speed = 1;
 
     void Update()
     {
-        if(asset)
-        asset.localEulerAngles = new Vector3(0, 0, asset.localEulerAngles.z+2);
+        transform.localEulerAngles = new Vector3(0, 0, transform.localEulerAngles.z + speed);
     }
 }

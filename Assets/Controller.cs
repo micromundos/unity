@@ -32,6 +32,7 @@ public class Controller : MonoBehaviour {
                 case 2: data.tag = "Dobla"; break;
                 case 3: data.tag = "Tele"; break;
                 case 4: data.tag = "Cinta"; break;
+                case 5: tag = "DoblaRandom"; break;
             }
         }
     }
@@ -44,6 +45,7 @@ public class Controller : MonoBehaviour {
             case 2: tag = "Dobla"; break;
             case 3: tag = "Tele"; break;
             case 4: tag = "Cinta"; break;
+            case 5: tag = "DoblaRandom"; break;
         }
         return tag;
     }
@@ -61,7 +63,9 @@ public class Controller : MonoBehaviour {
 
             Vector2 fixedDataPosition = new Vector2(data.position.x * fixedPosition.x, data.position.y * fixedPosition.y);
             go.transform.localPosition = fixedDataPosition;
-            go.transform.localEulerAngles = new Vector3(0, 0, data.rotation);
+
+            if(data.tag != "DoblaRandom")
+                go.transform.localEulerAngles = new Vector3(0, 0, data.rotation);
         }
     }
     GameObject GetObjectByTag(ObjectData data)

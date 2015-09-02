@@ -53,22 +53,26 @@ public class Car : MonoBehaviour {
 
         switch (hit.transform.gameObject.tag)
         {
+            case "Star":
+                Events.OnStarCatched(hit.transform.gameObject);
+                break;
             case "Limite":
                 if (Mathf.Abs(transform.localEulerAngles.z - hit.transform.localEulerAngles.z) > 40)
                     speed /= 1.2f;
                 transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
                 break;
+            case "DoblaRandom":
+                transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
+                break;
             case "Dobla":
                 if (Mathf.Abs(transform.localEulerAngles.z - hit.transform.localEulerAngles.z) > 1)
-                    speed /= 1.2f;
+                    speed /= 1.1f;
                 transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
                 break;
             case "Tele1":
                 teletransportable.SetOn(hit.transform.localPosition);
                 break;
             case "Cinta":
-                print("cinta");
-
                 Vector3 pos = transform.position;
 
                 speed += (acceleration);
