@@ -22,11 +22,18 @@ public class GameManager : MonoBehaviour {
         mInstance = this;
         settings = GetComponent<Settings>();
         Events.AddNewCar += AddNewCar;
+        Events.DestroyCar += DestroyCar;
         cam = Camera.main;
 	}
     void OnDestroy()
     {
         Events.AddNewCar -= AddNewCar;
+        Events.DestroyCar -= DestroyCar;
+    }
+    void DestroyCar(Car car)
+    {
+        totalCars--;
+        Destroy(car.gameObject);
     }
     void AddNewCar(Vector3 _position, Vector3 _eulerAngles)
     {

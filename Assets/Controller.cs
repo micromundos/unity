@@ -18,7 +18,7 @@ public class Controller : MonoBehaviour {
         [HideInInspector]
         public string tag;
     }
-    public List<GameObject> objects;
+    public List<SceneObject> objects;
 
     public GameObject ObjectsContiner;
 
@@ -46,33 +46,58 @@ public class Controller : MonoBehaviour {
             case 3: tag = "Tele"; break;
             case 4: tag = "Cinta"; break;
             case 5: tag = "DoblaRandom"; break;
+            case 6: tag = "Bomb"; break;
         }
         return tag;
     }
     void Update()
     {
-        foreach (GameObject go in objects)
-            go.transform.localPosition = new Vector3(10,0,0);
+        
 
         foreach (ObjectData data in ObjectsData)
         {
             data.tag = MapId(data.id);
-            GameObject go = GetObjectByTag(data);
+            SceneObject go = GetObjectByTag(data);
+            go.inUse = true;
 
             if (!go) { Debug.Log("FALTA UN " + data.tag); return; }
 
-            Vector2 fixedDataPosition = new Vector2(data.position.x * fixedPosition.x, data.position.y * fixedPosition.y);
-            go.transform.localPosition = fixedDataPosition;
+            go.inUse = true;
 
-            if(data.tag != "DoblaRandom")
-                go.transform.localEulerAngles = new Vector3(0, 0, data.rotation);
+            Vector2 fixedDataPosition = new Vector2(data.position.x * fixedPosition.x, data.position.y * fixedPosition.y);
+            Vector3 newRotation = new Vector3(0, 0, data.rotation);
+            if (go.transform.localPosition.x > 6)
+            {
+                go.transform.localPosition = fixedDataPosition;
+                if (data.tag != "DoblaRandom")
+                    go.transform.localEulerAngles = newRotation;
+            }
+            else
+            {
+                go.transform.localPosition = Vector2.Lerp(go.transform.localPosition, fixedDataPosition, 0.05f);
+                if (data.tag != "DoblaRandom")
+                {
+                    go.transform.localEulerAngles = newRotation;
+                   // go.transform.localEulerAngles = Vector3.Slerp(go.transform.localEulerAngles, newRotation, 0.05f);
+                }
+            }
+            
+
+            
         }
-    }
-    GameObject GetObjectByTag(ObjectData data)
-    {
-        foreach (GameObject go in objects)
+        foreach (SceneObject go in objects)
         {
-            if (go.tag == data.tag && go.transform.localPosition.x > 6)
+            if (!go.inUse)
+                go.transform.localPosition = new Vector3(10, 0, 0);
+            go.inUse = false;
+        }
+      
+    }
+    SceneObject GetObjectByTag(ObjectData data)
+    {
+        foreach (SceneObject go in objects)
+        {
+            if (go.tag == data.tag && !go.inUse)
                 return go;
         }
         return null;

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Dobla : MonoBehaviour {
+public class DoblaRandom : MonoBehaviour {
 
     public float speed = 1;
 

@@ -21,8 +21,6 @@ public class StarsManager : MonoBehaviour {
     }
 	void OnStarCatched(GameObject starGO)
     {
-        print(starGO.name);
-
         starGO.GetComponent<Star>().Catched();
 
         GameObject plane = plane3;

@@ -53,6 +53,9 @@ public class Car : MonoBehaviour {
 
         switch (hit.transform.gameObject.tag)
         {
+            case "Bomb":
+                Events.DestroyCar(this);
+                break;
             case "Star":
                 Events.OnStarCatched(hit.transform.gameObject);
                 break;
