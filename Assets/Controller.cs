@@ -6,7 +6,10 @@ using System;
 public class Controller : MonoBehaviour {
 
     public Vector2 fixedPosition;
-    public List<ObjectData> ObjectsData;    
+    public List<ObjectData> ObjectsData;
+
+    private float fixedPositionSpeed;
+    private float fixedRotationSpeed;
 
     [Serializable]
     public class ObjectData
@@ -24,6 +27,9 @@ public class Controller : MonoBehaviour {
 
     void Start()
     {
+        fixedPositionSpeed = GetComponent<Settings>().fixedPositionSpeed;
+        fixedRotationSpeed = GetComponent<Settings>().fixedRotationSpeed;
+
         foreach (ObjectData data in ObjectsData)
         {
             switch (data.id)
@@ -74,10 +80,14 @@ public class Controller : MonoBehaviour {
             }
             else
             {
-                go.transform.localPosition = Vector2.Lerp(go.transform.localPosition, fixedDataPosition, 0.05f);
+                go.transform.localPosition = Vector2.Lerp(go.transform.localPosition, fixedDataPosition, fixedPositionSpeed);
                 if (data.tag != "DoblaRandom" && data.tag != "River")
                 {
-                    go.transform.localEulerAngles = newRotation;
+                    if (data.rotation > go.transform.localEulerAngles.z+1)
+                        go.transform.localEulerAngles = new Vector3(0, 0, go.transform.localEulerAngles.z + fixedRotationSpeed);
+                    else if (data.rotation < go.transform.localEulerAngles.z-1)
+                        go.transform.localEulerAngles = new Vector3(0, 0, go.transform.localEulerAngles.z - fixedRotationSpeed);
+                   // go.transform.localEulerAngles = newRotation;
                    // go.transform.localEulerAngles = Vector3.Slerp(go.transform.localEulerAngles, newRotation, 0.05f);
                 }
             }            
