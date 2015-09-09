@@ -60,8 +60,14 @@ public class Car : MonoBehaviour {
                 Events.OnStarCatched(hit.transform.gameObject);
                 break;
             case "Limite":
+                Events.DestroyCar(this);
+                //if (Mathf.Abs(transform.localEulerAngles.z - hit.transform.localEulerAngles.z) > 40)
+                //    speed /= 1.2f;
+                //transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
+                break;
+            case "River":
                 if (Mathf.Abs(transform.localEulerAngles.z - hit.transform.localEulerAngles.z) > 40)
-                    speed /= 1.2f;
+                    speed /= 1.6f;
                 transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
                 break;
             case "DoblaRandom":
@@ -69,7 +75,7 @@ public class Car : MonoBehaviour {
                 break;
             case "Dobla":
                 if (Mathf.Abs(transform.localEulerAngles.z - hit.transform.localEulerAngles.z) > 1)
-                    speed /= 1.1f;
+                    speed /= 1.03f;
                 transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
                 break;
             case "Tele1":

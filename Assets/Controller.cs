@@ -32,7 +32,9 @@ public class Controller : MonoBehaviour {
                 case 2: data.tag = "Dobla"; break;
                 case 3: data.tag = "Tele"; break;
                 case 4: data.tag = "Cinta"; break;
-                case 5: tag = "DoblaRandom"; break;
+                case 5: data.tag = "DoblaRandom"; break;
+                case 6: data.tag = "Bomb"; break;
+                case 7: data.tag = "River"; break;
             }
         }
     }
@@ -47,6 +49,7 @@ public class Controller : MonoBehaviour {
             case 4: tag = "Cinta"; break;
             case 5: tag = "DoblaRandom"; break;
             case 6: tag = "Bomb"; break;
+            case 7: tag = "River"; break;
         }
         return tag;
     }
@@ -58,36 +61,30 @@ public class Controller : MonoBehaviour {
         {
             data.tag = MapId(data.id);
             SceneObject go = GetObjectByTag(data);
-            go.inUse = true;
 
             if (!go) { Debug.Log("FALTA UN " + data.tag); return; }
-
-            go.inUse = true;
 
             Vector2 fixedDataPosition = new Vector2(data.position.x * fixedPosition.x, data.position.y * fixedPosition.y);
             Vector3 newRotation = new Vector3(0, 0, data.rotation);
             if (go.transform.localPosition.x > 6)
             {
                 go.transform.localPosition = fixedDataPosition;
-                if (data.tag != "DoblaRandom")
+                if (data.tag != "DoblaRandom" && data.tag != "River")
                     go.transform.localEulerAngles = newRotation;
             }
             else
             {
                 go.transform.localPosition = Vector2.Lerp(go.transform.localPosition, fixedDataPosition, 0.05f);
-                if (data.tag != "DoblaRandom")
+                if (data.tag != "DoblaRandom" && data.tag != "River")
                 {
                     go.transform.localEulerAngles = newRotation;
                    // go.transform.localEulerAngles = Vector3.Slerp(go.transform.localEulerAngles, newRotation, 0.05f);
                 }
-            }
-            
-
-            
+            }            
         }
         foreach (SceneObject go in objects)
         {
-            if (!go.inUse)
+            if (go!= null && !go.inUse)
                 go.transform.localPosition = new Vector3(10, 0, 0);
             go.inUse = false;
         }
@@ -97,9 +94,15 @@ public class Controller : MonoBehaviour {
     {
         foreach (SceneObject go in objects)
         {
-            if (go.tag == data.tag && !go.inUse)
+            if (go == null) print("NO EXISTE Con tag: " + data.tag);
+
+            if (go!= null && go.tag == data.tag && go.inUse == false)
+            {
+                go.inUse = true;
                 return go;
+            }
         }
+        print("ERROR " + data.tag);
         return null;
     }
     void CreateCar()
