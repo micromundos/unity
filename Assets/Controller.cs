@@ -7,7 +7,7 @@ public class Controller : MonoBehaviour {
 
     public Vector2 fixedPosition;
     public List<ObjectData> ObjectsData;
-
+	public OSCManager	osc_manager;
     private float fixedPositionSpeed;
     private float fixedRotationSpeed;
 
@@ -74,6 +74,8 @@ public class Controller : MonoBehaviour {
             if (data.tag == "River")
                 fixedDataPosition.z = 0;
             Vector3 newRotation = new Vector3(0, 0, data.rotation);
+
+			Debug.Log(data.rotation);
             if (go.transform.localPosition.x > 6)
             {
                 

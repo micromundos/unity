@@ -155,7 +155,7 @@ public class Car : MonoBehaviour {
         if (positionName == "center")
         {
             floorHeight = newFloorHeight;
-            speed -= pendiente / 1.5f;
+            speed += pendiente / 1.5f;
         }
         
     }
