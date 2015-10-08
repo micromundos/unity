@@ -12,17 +12,20 @@ public class Car : MonoBehaviour {
     public Vector3 rotation;
     public float smoothRotation;
     public float floorHeight;
+    private bool debug;
 
     private Teletransportable teletransportable;
 
 	void Start () {
+        debug = GameManager.Instance.settings.DEBUG;
         teletransportable = GetComponent<Teletransportable>();
         GetComponentInChildren<SpriteRenderer>().sprite = sprites[ Random.Range(0, sprites.Length) ];
 	}
 
 	void Update () {
-
         Vector3 pos = transform.position ;
+        if (Mathf.Abs(pos.x) > 4 || Mathf.Abs(pos.y) > 4 ) Events.DestroyCar(this);
+
         Vector3 frontPosition = pos;
         frontPosition += transform.forward / 10;
         
@@ -44,9 +47,10 @@ public class Car : MonoBehaviour {
 
         CheckCenterHit(frontPosition, Color.red);
 	}
+    string lastHitObjectTag;
     void CheckCenterHit(Vector3 coord, Color DebugColor)
     {
-      //  DebugDraw.DrawSphere(coord, 0.1f, DebugColor);
+        if (debug) DebugDraw.DrawSphere(coord, 0.1f, DebugColor);
 
         RaycastHit hit = GetCollision(coord, "center");
         if (hit.transform == null) return;
@@ -66,9 +70,12 @@ public class Car : MonoBehaviour {
                 //transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
                 break;
             case "River":
-                if (Mathf.Abs(transform.localEulerAngles.z - hit.transform.localEulerAngles.z) > 40)
-                    speed /= 1.6f;
-                transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
+                if (floorHeight<0.1f &&  lastHitObjectTag != hit.transform.gameObject.tag)
+                {
+                    Vector3 rot = transform.localEulerAngles;
+                    rot.z = rot.z - 180;
+                    transform.localEulerAngles = rot;
+                }
                 break;
             case "DoblaRandom":
                 transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
@@ -92,35 +99,53 @@ public class Car : MonoBehaviour {
 
                 break;
         }
+        lastHitObjectTag = hit.transform.gameObject.tag;
     }
     void CheckBorderHit(Vector3 coord, Color DebugColor, string positionName)
     {
-        if(GameManager.Instance.settings.DEBUG)
+        if (debug)
             DebugDraw.DrawSphere(coord, 0.1f, DebugColor);
         RaycastHit hit = GetCollision(coord, positionName);
     }
     private RaycastHit GetCollision(Vector3 coord, string positionName)
     {
-        RaycastHit hit = new RaycastHit();
-        Ray ray = new Ray();
-        ray.origin = coord;
-        ray.direction = Vector3.down;
-        if (Physics.Raycast(ray, out hit))
-        {
-            changeFloorHeight(GameManager.Instance.GetFloorHeight(hit), positionName);
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(coord, Vector3.down, 100.0F);
 
-            Vector3 hitPos = Camera.main.WorldToScreenPoint(hit.point);
+        RaycastHit hitToReturn = hits[0];
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+            Renderer rend = hit.transform.GetComponent<Renderer>();
+            if (hit.transform.gameObject.name == "Plane")
+                changeFloorHeight(GameManager.Instance.GetFloorHeight(hit), positionName);
+            else hitToReturn = hit;
         }
-        return hit;
+        return hitToReturn;
+
+       // RaycastHit hit = new RaycastHit();
+        //Ray ray = new Ray();
+        //ray.origin = coord;
+        //ray.direction = Vector3.down;
+        //if (Physics.RaycastAll(ray, out hit))
+        //{
+        //    if (hit.transform.gameObject.name == "Plane")
+        //         changeFloorHeight(GameManager.Instance.GetFloorHeight(hit), positionName);
+
+        //   // Vector3 hitPos = Camera.main.WorldToScreenPoint(hit.point);
+        //}
+        //return hit;
     }
     void changeFloorHeight(float newFloorHeight, string positionName)
     {
+        
         pendiente = newFloorHeight - floorHeight;
         if (newFloorHeight != floorHeight)
         {
             float heightDifference = Mathf.Abs(pendiente);
             if (heightDifference > 0.5f)
             {
+                print("heightDifference " + heightDifference);
                 if (positionName == "right") 
                     turn(true);
                 else if (positionName == "left")
@@ -132,6 +157,7 @@ public class Car : MonoBehaviour {
             floorHeight = newFloorHeight;
             speed -= pendiente / 1.5f;
         }
+        
     }
     private void turn(bool right)
     {

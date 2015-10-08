@@ -70,17 +70,21 @@ public class Controller : MonoBehaviour {
 
             if (!go) { Debug.Log("FALTA UN " + data.tag); return; }
 
-            Vector2 fixedDataPosition = new Vector2(data.position.x * fixedPosition.x, data.position.y * fixedPosition.y);
+            Vector3 fixedDataPosition = new Vector3(data.position.x * fixedPosition.x, data.position.y * fixedPosition.y, -0.2f);
+            if (data.tag == "River")
+                fixedDataPosition.z = 0;
             Vector3 newRotation = new Vector3(0, 0, data.rotation);
             if (go.transform.localPosition.x > 6)
             {
+                
+
                 go.transform.localPosition = fixedDataPosition;
                 if (data.tag != "DoblaRandom" && data.tag != "River")
                     go.transform.localEulerAngles = newRotation;
             }
             else
             {
-                go.transform.localPosition = Vector2.Lerp(go.transform.localPosition, fixedDataPosition, fixedPositionSpeed);
+                go.transform.localPosition = Vector3.Lerp(go.transform.localPosition, fixedDataPosition, fixedPositionSpeed);
                 if (data.tag != "DoblaRandom" && data.tag != "River")
                 {
                     if (data.rotation > go.transform.localEulerAngles.z+1)
@@ -95,7 +99,7 @@ public class Controller : MonoBehaviour {
         foreach (SceneObject go in objects)
         {
             if (go!= null && !go.inUse)
-                go.transform.localPosition = new Vector3(10, 0, 0);
+                go.transform.localPosition = new Vector3(10, 0, go.transform.localPosition.z);
             go.inUse = false;
         }
       
