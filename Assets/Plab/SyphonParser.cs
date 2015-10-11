@@ -19,26 +19,31 @@ public class SyphonParser : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		/*	
-		if (!seted) {
-			if(syphon_holder != null)
-			{
-				seted = true;
-				float height = cam.orthographicSize * 2.0f;
-				float width = height * Screen.width / Screen.height;
-				syphon_holder.transform.localScale = new Vector3(width, 0.0f, height);
-			}
-		}*/
-		//if (slider_fps.value == 0 || (slider_fps.value > 0 && Time.frameCount % 2 == slider_fps.value)) {
-		 
+	void OnPostRender () {
+
+	
 		RenderTexture texture = syphon_holder.GetComponent<SyphonClientTexture> ().clientObject.AttachedTexture;
-		RenderTexture currentActiveRT = RenderTexture.active;
-		RenderTexture.active = texture;
-		surface_map = new Texture2D (texture.width, texture.height);
-		surface_map.ReadPixels (new Rect (0, 0, texture.width, texture.height), 0, 0);
-		RenderTexture.active = currentActiveRT;
+		if (texture != null) {
+			if(texture.width > 0 && texture.height > 0){
+				RenderTexture currentActiveRT = RenderTexture.active;
+				RenderTexture.active = texture;
+				if(surface_map == null){
+					Debug.Log("ALOCO");
+					surface_map = new Texture2D (texture.width, texture.height);
+				}
+				surface_map.ReadPixels (new Rect (0, 0, Mathf.RoundToInt(texture.width),  Mathf.RoundToInt(texture.height)), 0, 0);
+				surface_map.Apply();
+				RenderTexture.active = currentActiveRT;
+			}else{
+		//		surface_map = null;
+			}
+		} else {
+			//surface_map = null;
+		}		
+	
 	}
+
+
 
 	public Texture2D	SurfaceMap()
 	{

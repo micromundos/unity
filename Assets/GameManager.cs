@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour {
         Events.AddNewCar += AddNewCar;
         Events.DestroyCar += DestroyCar;
         cam = Camera.main;
+		syphon_parser = cam.GetComponent<SyphonParser>();
 	}
     void OnDestroy()
     {
@@ -52,16 +53,22 @@ public class GameManager : MonoBehaviour {
 	}
     public float GetFloorHeight(RaycastHit hit )
     {
-		if (syphon_parser != null) {
+		if (syphon_parser != null && syphon_parser.SurfaceMap() != null) {
+
 			Vector2 pixelUV = hit.textureCoord;
 			pixelUV.x *= syphon_parser.SurfaceMap().width;
 			pixelUV.y *= syphon_parser.SurfaceMap().height;
-			Color color = syphon_parser.SurfaceMap().GetPixel ((int)pixelUV.x, (int)pixelUV.y);
-			
-			return color.r + color.g + color.b;
+			if((int)pixelUV.x > -1 && (int)pixelUV.x < syphon_parser.SurfaceMap().width && (int)pixelUV.y > -1 && (int)pixelUV.y < syphon_parser.SurfaceMap().height){
+
+				Color color = syphon_parser.SurfaceMap().GetPixel ((int)pixelUV.x, (int)pixelUV.y);
+				return color.r + color.g + color.b;
+			}else{
+				return 0;
+			}
 			
 		} else {
 			return 0;
 		}
+
     }
 }

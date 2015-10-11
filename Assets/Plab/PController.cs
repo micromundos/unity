@@ -128,6 +128,9 @@ public class PController : MonoBehaviour {
 				go.transform.localPosition = new Vector3(10, 0, go.transform.localPosition.z);
 			go.inUse = false;
 		}
+
+
+		osc_manager.Clear ();;
       
     }
 
