@@ -10,6 +10,7 @@ public class OSCManager : MonoBehaviour {
 	OSCServer	osc_server;
 	public List<MMTag>		tags;
 	public		bool	simular = false;
+	public PController pController;
 	
 	// Use this for initialization
 	void Start () {
@@ -32,8 +33,9 @@ public class OSCManager : MonoBehaviour {
 
 
 		if (packet.IsBundle ()) {
+			Debug.Log("------------------------------------------"+tags.Count);
 			foreach (OSCMessage o in packet.Data) {
-				Debug.Log("Mensaje " + o.Address + " = " + o.Data[0].ToString());
+				//Debug.Log("Mensaje " + o.Address + " = " + o.Data[0].ToString());
 				if (o.Address == "/add") {
 					create_tag (o);
 				} else if (o.Address == "/remove") {
@@ -49,10 +51,10 @@ public class OSCManager : MonoBehaviour {
 					if (index != -1) {
 						(tags [index] as MMTag).position.x = Remap(((float)o.Data [1]),0.0f,1.0f,-1.0f,1.0f);
 						(tags [index] as MMTag).position.y = Remap(((float)o.Data [2]),0.0f,1.0f,1.0f,-1.0f);
+					//	Debug.Log("update:  x:::: " + (tags [index] as MMTag).position.x);
 						(tags [index] as MMTag).rotation = ((float)o.Data [3])* Mathf.Rad2Deg;
 						
 					}else{
-						Debug.Log("En update");
 						create_tag (o);
 					}
 				}
@@ -64,7 +66,7 @@ public class OSCManager : MonoBehaviour {
 
 	public void	Clear()
 	{
-		tags.Clear ();
+		//tags.Clear ();
 	}
 	
 	float Remap (this float value, float from1, float to1, float from2, float to2) {

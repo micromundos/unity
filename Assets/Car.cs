@@ -54,7 +54,7 @@ public class Car : MonoBehaviour {
 
         RaycastHit hit = GetCollision(coord, "center");
         if (hit.transform == null) return;
-
+		Debug.Log (("chica  " + hit.transform.gameObject.tag));
         switch (hit.transform.gameObject.tag)
         {
             case "Bomb":
@@ -111,6 +111,9 @@ public class Car : MonoBehaviour {
     {
         RaycastHit[] hits;
         hits = Physics.RaycastAll(coord, Vector3.down, 100.0F);
+		if (hits.Length == 0)
+			return new RaycastHit ();
+
 
         RaycastHit hitToReturn = hits[0];
         for (int i = 0; i < hits.Length; i++)

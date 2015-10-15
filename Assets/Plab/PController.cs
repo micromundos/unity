@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System;
+using System.Linq;
 
 public class PController : MonoBehaviour {
 
@@ -61,18 +62,28 @@ public class PController : MonoBehaviour {
         string tag = null;
         switch (id)
         {
+			case 0: tag = "Creator"; break;
             case 1: tag = "Creator"; break;
             case 2: tag = "Dobla"; break;
-            case 3: tag = "Tele"; break;
-            case 4: tag = "Cinta"; break;
-            case 5: tag = "DoblaRandom"; break;
-            case 6: tag = "Bomb"; break;
-            case 7: tag = "River"; break;
+			case 3: tag = "Dobla"; break;
+			case 4: tag = "Dobla"; break;
+            case 5: tag = "Tele"; break;
+			case 6: tag = "Tele"; break;
+            case 7: tag = "Cinta"; break;
+			case 8: tag = "Cinta"; break;
+			case 9: tag = "Cinta"; break;
+            case 10: tag = "DoblaRandom"; break;
+			case 11: tag = "DoblaRandom"; break;
+			case 12: tag = "DoblaRandom"; break;
+            case 13: tag = "Bomb"; break;
+            case 14: tag = "River"; break;
+			case 15: tag = "River"; break;
         }
         return tag;
     }
     void Update()
     {
+
 		ObjectsData.Clear ();
 		foreach (MMTag data in osc_manager.tags) {
 			ObjectData	o = new ObjectData();
@@ -81,15 +92,17 @@ public class PController : MonoBehaviour {
 			o.rotation = (int)data.rotation;
 			ObjectsData.Add(o);
 
-
 		}
-	//	ObjectsData = osc_manager.tags;
+		ObjectsData.OrderBy (o => o.id).ToList ();
+		//ObjectsData = osc_manager.tags;
 
 
 		
 		foreach (ObjectData data in ObjectsData)
 		{
-			data.tag = MapId(data.id);
+		//foreach (MMTag data in oscManager.tags)
+		//{
+		data.tag = MapId(data.id);
 			SceneObject go = GetObjectByTag(data);
 			
 			if (!go) { Debug.Log("FALTA UN " + data.tag); return; }
@@ -99,7 +112,7 @@ public class PController : MonoBehaviour {
 				fixedDataPosition.z = 0;
 			Vector3 newRotation = new Vector3(0, 0, data.rotation);
 			
-			Debug.Log(data.rotation);
+		//	Debug.Log(data.rotation);
 			if (go.transform.localPosition.x > 6)
 			{
 				
@@ -110,15 +123,17 @@ public class PController : MonoBehaviour {
 			}
 			else
 			{
+
 				go.transform.localPosition = Vector3.Lerp(go.transform.localPosition, fixedDataPosition, fixedPositionSpeed);
 				if (data.tag != "DoblaRandom" && data.tag != "River")
 				{
-					if (data.rotation > go.transform.localEulerAngles.z+1)
-						go.transform.localEulerAngles = new Vector3(0, 0, go.transform.localEulerAngles.z + fixedRotationSpeed);
-					else if (data.rotation < go.transform.localEulerAngles.z-1)
-						go.transform.localEulerAngles = new Vector3(0, 0, go.transform.localEulerAngles.z - fixedRotationSpeed);
-					// go.transform.localEulerAngles = newRotation;
-					// go.transform.localEulerAngles = Vector3.Slerp(go.transform.localEulerAngles, newRotation, 0.05f);
+						go.SetRotation(data.rotation);				
+					//if (data.rotation > go.transform.localEulerAngles.z+1)
+//						go.transform.localEulerAngles = new Vector3(0, 0, go.transform.localEulerAngles.z + fixedRotationSpeed);
+//					else if (data.rotation < go.transform.localEulerAngles.z-1)
+//						go.transform.localEulerAngles = new Vector3(0, 0, go.transform.localEulerAngles.z - fixedRotationSpeed);
+//					// go.transform.localEulerAngles = newRotation;
+//					// go.transform.localEulerAngles = Vector3.Slerp(go.transform.localEulerAngles, newRotation, 0.05f);
 				}
 			}            
 		}
@@ -130,7 +145,7 @@ public class PController : MonoBehaviour {
 		}
 
 
-		osc_manager.Clear ();;
+		//osc_manager.Clear ();;
       
     }
 
