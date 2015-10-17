@@ -145,7 +145,7 @@ public class Car : MonoBehaviour {
             float heightDifference = Mathf.Abs(pendiente);
             if (heightDifference > 0.5f)
             {
-                print("heightDifference " + heightDifference);
+            //    print("heightDifference " + heightDifference);
                 if (positionName == "right") 
                     turn(true);
                 else if (positionName == "left")

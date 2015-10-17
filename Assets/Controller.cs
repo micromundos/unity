@@ -87,10 +87,11 @@ public class Controller : MonoBehaviour {
                 go.transform.localPosition = Vector3.Lerp(go.transform.localPosition, fixedDataPosition, fixedPositionSpeed);
                 if (data.tag != "DoblaRandom" && data.tag != "River")
                 {
-                    if (data.rotation > go.transform.localEulerAngles.z+1)
-                        go.transform.localEulerAngles = new Vector3(0, 0, go.transform.localEulerAngles.z + fixedRotationSpeed);
-                    else if (data.rotation < go.transform.localEulerAngles.z-1)
-                        go.transform.localEulerAngles = new Vector3(0, 0, go.transform.localEulerAngles.z - fixedRotationSpeed);
+                    go.SetRotation(data.rotation);
+                    //if (data.rotation > go.transform.localEulerAngles.z+1)
+                    //    go.transform.localEulerAngles = new Vector3(0, 0, go.transform.localEulerAngles.z + fixedRotationSpeed);
+                    //else if (data.rotation < go.transform.localEulerAngles.z-1)
+                    //    go.transform.localEulerAngles = new Vector3(0, 0, go.transform.localEulerAngles.z - fixedRotationSpeed);
                    // go.transform.localEulerAngles = newRotation;
                    // go.transform.localEulerAngles = Vector3.Slerp(go.transform.localEulerAngles, newRotation, 0.05f);
                 }
