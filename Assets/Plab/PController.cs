@@ -84,17 +84,17 @@ public class PController : MonoBehaviour {
     void Update()
     {
 
-		ObjectsData.Clear ();
-		foreach (MMTag data in osc_manager.tags) {
-			ObjectData	o = new ObjectData();
-			o.id = (int.Parse(data.id));
-			o.position = data.position;
-			o.rotation = (int)data.rotation;
-			ObjectsData.Add(o);
+        ObjectsData.Clear();
+        foreach (MMTag data in osc_manager.tags)
+        {
+            ObjectData o = new ObjectData();
+            o.id = (int.Parse(data.id));
+            o.position = data.position;
+            o.rotation = (int)data.rotation;
+            ObjectsData.Add(o);
 
-		}
-		ObjectsData.OrderBy (o => o.id).ToList ();
-		//ObjectsData = osc_manager.tags;
+        }
+        ObjectsData.OrderBy(o => o.id).ToList();
 
 
 		
@@ -102,10 +102,12 @@ public class PController : MonoBehaviour {
 		{
 		//foreach (MMTag data in oscManager.tags)
 		//{
-		data.tag = MapId(data.id);
-			SceneObject go = GetObjectByTag(data);
-			
+		    //data.tag = MapId(data.id);
+			//SceneObject go = GetObjectByTag(data);
+
+            SceneObject go = GetObjectById(data.id);
 			if (!go) { Debug.Log("FALTA UN " + data.tag); return; }
+            go.inUse = true;
 			
 			Vector3 fixedDataPosition = new Vector3(data.position.x * fixedPosition.x, data.position.y * fixedPosition.y, -0.2f);
 			if (data.tag == "River")
@@ -115,26 +117,13 @@ public class PController : MonoBehaviour {
 		//	Debug.Log(data.rotation);
 			if (go.transform.localPosition.x > 6)
 			{
-				
-				
 				go.transform.localPosition = fixedDataPosition;
-				if (data.tag != "DoblaRandom" && data.tag != "River")
-					go.transform.localEulerAngles = newRotation;
+                go.SetRotation(data.rotation);
 			}
 			else
 			{
-
 				go.transform.localPosition = Vector3.Lerp(go.transform.localPosition, fixedDataPosition, fixedPositionSpeed);
-				if (data.tag != "DoblaRandom" && data.tag != "River")
-				{
-						go.SetRotation(data.rotation);				
-					//if (data.rotation > go.transform.localEulerAngles.z+1)
-//						go.transform.localEulerAngles = new Vector3(0, 0, go.transform.localEulerAngles.z + fixedRotationSpeed);
-//					else if (data.rotation < go.transform.localEulerAngles.z-1)
-//						go.transform.localEulerAngles = new Vector3(0, 0, go.transform.localEulerAngles.z - fixedRotationSpeed);
-//					// go.transform.localEulerAngles = newRotation;
-//					// go.transform.localEulerAngles = Vector3.Slerp(go.transform.localEulerAngles, newRotation, 0.05f);
-				}
+                go.SetRotation(data.rotation);
 			}            
 		}
 		foreach (SceneObject go in objects)
@@ -149,7 +138,15 @@ public class PController : MonoBehaviour {
       
     }
 
+    SceneObject GetObjectById(int id)
+    {
+        foreach (SceneObject go in objects)
+            if (go.id == id)
+                return go;
 
+        Debug.LogError("ERROR: no hay objetos con id:  " + id);
+        return null;
+    }
 	SceneObject GetObjectByTag(ObjectData data)
 	{
 		foreach (SceneObject go in objects)
@@ -165,11 +162,5 @@ public class PController : MonoBehaviour {
 		print("ERROR " + data.tag);
 		return null;
 	}
-
-    void CreateCar()
-    {
-        Events.AddNewCar(transform.localPosition, transform.localEulerAngles);
-        Invoke("CreateCar", 2);
-    }
 	
 }

@@ -18,8 +18,8 @@ public class Star : MonoBehaviour {
     void SetOnAgain()
     {
         anim.Play("starRestart");
-        float _X = (float)Random.Range(-140, 140) / 100;
-        float _Y = (float)Random.Range(-100, 100) / 100;
+        float _X = (float)Random.Range(-120, 120) / 100;
+        float _Y = (float)Random.Range(-80, 80) / 100;
         Vector2 pos = new Vector2(_X, _Y);
         transform.localPosition = pos;
 

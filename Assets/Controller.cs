@@ -121,10 +121,5 @@ public class Controller : MonoBehaviour {
         print("ERROR " + data.tag);
         return null;
     }
-    void CreateCar()
-    {
-        Events.AddNewCar(transform.localPosition, transform.localEulerAngles);
-        Invoke("CreateCar", 2);
-    }
 	
 }

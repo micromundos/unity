@@ -16,10 +16,10 @@ public class Car : MonoBehaviour {
 
     private Teletransportable teletransportable;
 
-	void Start () {
+	public void Init (int id) {
         debug = GameManager.Instance.settings.DEBUG;
         teletransportable = GetComponent<Teletransportable>();
-        GetComponentInChildren<SpriteRenderer>().sprite = sprites[ Random.Range(0, sprites.Length) ];
+        GetComponentInChildren<SpriteRenderer>().sprite = sprites[id];
 	}
 
 	void Update () {
@@ -54,7 +54,6 @@ public class Car : MonoBehaviour {
 
         RaycastHit hit = GetCollision(coord, "center");
         if (hit.transform == null) return;
-		Debug.Log (("chica  " + hit.transform.gameObject.tag));
         switch (hit.transform.gameObject.tag)
         {
             case "Bomb":
@@ -85,7 +84,7 @@ public class Car : MonoBehaviour {
                     speed /= 1.03f;
                 transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
                 break;
-            case "Tele1":
+            case "Tele":
                 teletransportable.SetOn(hit.transform.localPosition);
                 break;
             case "Cinta":

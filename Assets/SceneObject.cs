@@ -6,6 +6,8 @@ public class SceneObject : MonoBehaviour {
 
     public bool inUse;
 	private List<int> rotations;
+    public int id;
+    public bool disableRotation;
 
 	void Start () {
 		Invoke ("UpdataState", 1);
@@ -16,17 +18,23 @@ public class SceneObject : MonoBehaviour {
 		Invoke ("UpdataState", 1);
 		int rotationNormal = 0;
 		int sumas = 0;
-		if (rotations.Count == 0)
-			return;
-		foreach (int rot in rotations)
-			sumas += rot;
-		rotationNormal = sumas / rotations.Count;
-		transform.localEulerAngles = new Vector3(0,0,rotationNormal);
-		rotations.Clear();
+
+        if (disableRotation) return;
+
+        
+        else if (rotations.Count > 1)
+        {
+            foreach (int rot in rotations)
+                sumas += rot;
+            rotationNormal = sumas / rotations.Count;
+            transform.localEulerAngles = new Vector3(0, 0, rotationNormal);
+            rotations.Clear();
+        }
 	}
-	public void SetRotation(int rotation)
-	{
-		rotations.Add (rotation);
-	}
+	
+    public void SetRotation(int rotation)
+    {
+        rotations.Add(rotation);
+    }
 
 }
