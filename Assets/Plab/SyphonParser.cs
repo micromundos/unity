@@ -21,7 +21,8 @@ public class SyphonParser : MonoBehaviour {
 	// Update is called once per frame
 	void OnPostRender () {
 
-	
+		if (syphon_holder.GetComponent<SyphonClientTexture> ().clientObject == null)
+			return;
 		RenderTexture texture = syphon_holder.GetComponent<SyphonClientTexture> ().clientObject.AttachedTexture;
 		if (texture != null) {
 			if(texture.width > 0 && texture.height > 0){

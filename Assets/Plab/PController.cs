@@ -122,7 +122,8 @@ public class PController : MonoBehaviour {
 			}
 			else
 			{
-				go.transform.localPosition = Vector3.Lerp(go.transform.localPosition, fixedDataPosition, fixedPositionSpeed);
+				//go.transform.localPosition = Vector3.Lerp(go.transform.localPosition, fixedDataPosition, fixedPositionSpeed);
+				go.transform.localPosition =  fixedDataPosition;
                 go.SetRotation(data.rotation);
 			}            
 		}

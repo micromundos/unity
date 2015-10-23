@@ -30,10 +30,10 @@ public class OSCManager : MonoBehaviour {
 	void OnPacketReceived(OSCServer server, OSCPacket packet)
 	{
 
-
+		//Debug.Log("------------------------------------------"+tags.Count);
 
 		if (packet.IsBundle ()) {
-			Debug.Log("------------------------------------------"+tags.Count);
+
 			foreach (OSCMessage o in packet.Data) {
 				//Debug.Log("Mensaje " + o.Address + " = " + o.Data[0].ToString());
 				if (o.Address == "/add") {
