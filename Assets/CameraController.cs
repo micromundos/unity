@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour {
 
 	private float positionSpeed =  0.005f;
     private float defaultFieldOfViewSpeed = 0.1f;
-	private float rotationSpeed =  0.05f;
+	private float rotationSpeed =  0.5f;
 
 	private Vector3 defaultPos;
 	private Vector3 defaultRot;
@@ -71,21 +71,21 @@ public class CameraController : MonoBehaviour {
 
 
 		if(Input.GetKeyDown(KeyCode.W))
-            _rot_x += positionSpeed;
+			_rot_x += rotationSpeed;
 		else if(Input.GetKeyDown(KeyCode.E))
-            _rot_x -= positionSpeed;
-
+			_rot_x -= rotationSpeed;
+		
 		if(Input.GetKeyDown(KeyCode.S))
-            _rot_y += positionSpeed;
+			_rot_y += rotationSpeed;
 		else if(Input.GetKeyDown(KeyCode.D))
-            _rot_y -= positionSpeed;
+			_rot_y -= rotationSpeed;
 		
 		if(Input.GetKeyDown(KeyCode.X))
-            _rot_z += positionSpeed;
+			_rot_z += rotationSpeed;
 		else if(Input.GetKeyDown(KeyCode.C))
-            _rot_z -= positionSpeed;
-
-        if (Input.GetKeyDown(KeyCode.O))
+			_rot_z -= rotationSpeed;
+		
+		if (Input.GetKeyDown(KeyCode.O))
             _field_of_view += defaultFieldOfViewSpeed;
         else if (Input.GetKeyDown(KeyCode.P))
             _field_of_view -= defaultFieldOfViewSpeed;
