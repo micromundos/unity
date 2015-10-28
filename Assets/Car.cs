@@ -119,8 +119,11 @@ public class Car : MonoBehaviour {
         {
             RaycastHit hit = hits[i];
             Renderer rend = hit.transform.GetComponent<Renderer>();
-            if (hit.transform.gameObject.name == "Plane")
+			Debug.Log(hit.transform.gameObject.name);
+            if (hit.transform.gameObject.name == "Plane"){
+			//	Debug.Log(GameManager.Instance.GetFloorHeight(hit));
                 changeFloorHeight(GameManager.Instance.GetFloorHeight(hit), positionName);
+			}
             else hitToReturn = hit;
         }
         return hitToReturn;
