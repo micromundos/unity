@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class SyphonParser : MonoBehaviour {
+public class MicromundosSurfacesSyphonParser : MonoBehaviour {
 
 	//	in
 	public	GameObject	syphon_holder;	//el objeto que tenga el script de syphon asociado
@@ -29,7 +29,7 @@ public class SyphonParser : MonoBehaviour {
 				RenderTexture currentActiveRT = RenderTexture.active;
 				RenderTexture.active = texture;
 				if(surface_map == null){
-					Debug.Log("ALOCO");
+					//Debug.Log("ALOCO");
 					surface_map = new Texture2D (texture.width, texture.height);
 				}
 				surface_map.ReadPixels (new Rect (0, 0, Mathf.RoundToInt(texture.width),  Mathf.RoundToInt(texture.height)), 0, 0);

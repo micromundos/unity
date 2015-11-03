@@ -4,7 +4,7 @@ using System.Collections;
 using System;
 using System.Linq;
 
-public class PController : MonoBehaviour {
+public class AutitosController : MonoBehaviour {
 
     public Vector2 fixedPosition;
 	public OSCManager	osc_manager;

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityOSC;
 using System.Net;
@@ -10,10 +10,10 @@ public class OSCManager : MonoBehaviour {
 	OSCServer	osc_server;
 	public List<MMTag>		tags;
 	public		bool	simular = false;
-	public PController pController;
+	public AutitosController pController;
 	public		float		RGB_WIDTH = 1024.0f;
 	public		float		RGB_HEIGHT = 576.0f;
-	public		SCalibrationLoader	calibration_loader;
+	public		CL_CalibrationLoader	calibration_loader;
 	// Use this for initialization
 	void Start () {
 		tags = new List<MMTag>();

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.IO;
 
-public class SCalibrationLoader : MonoBehaviour {
+public class CL_CalibrationLoader : MonoBehaviour {
 
 	// Use this for initialization
 	///Users/micromundos/dev/of/apps/micromundos/data/calib

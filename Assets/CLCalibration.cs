@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class CLCalibration : MonoBehaviour {
 
 
-	public SCalibrationLoader	calibration_loader;
+	public CL_CalibrationLoader	calibration_loader;
 	bool	calib_applied;
 
 	// Use this for initialization

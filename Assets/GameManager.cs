@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
     public SpriteRenderer piso;
     public Camera cam;
     static GameManager mInstance = null;
-	public SyphonParser	syphon_parser;
+	public MicromundosSurfacesSyphonParser	syphon_parser;
     public int totalCars;
 
     public static GameManager Instance
@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour {
         Events.AddNewCar += AddNewCar;
         Events.DestroyCar += DestroyCar;
         cam = Camera.main;
-		syphon_parser = cam.GetComponent<SyphonParser>();
+		syphon_parser = cam.GetComponent<MicromundosSurfacesSyphonParser>();
 	}
     void OnDestroy()
     {
