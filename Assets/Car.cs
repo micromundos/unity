@@ -4,8 +4,8 @@ using System.Collections;
 public class Car : MonoBehaviour {
 
     public Sprite[] sprites;
-    public float pendiente;
-    public float speed;
+    public float pendiente;    
+    public float realSpeed;
     public float acceleration;
     public float maxSpeed;
     public Vector3 direction;
@@ -14,21 +14,32 @@ public class Car : MonoBehaviour {
     public float floorHeight;
     private bool debug;
 
+    private float car_Turn_180_lowerSpeed;
+    private float pendiente_Speed;
+    private float speed;
+
     private Teletransportable teletransportable;
 
+    private Vector3 forwardVector;
+
 	public void Init (int id) {
+        pendiente_Speed = GameManager.Instance.settings.pendiente_Speed;
+        car_Turn_180_lowerSpeed = GameManager.Instance.settings.car_Turn_180_lowerSpeed;
+        acceleration = GameManager.Instance.settings.car_acceleration;
+        maxSpeed = GameManager.Instance.settings.car_max_speed;
+
         debug = GameManager.Instance.settings.DEBUG;
         teletransportable = GetComponent<Teletransportable>();
         GetComponentInChildren<SpriteRenderer>().sprite = sprites[id];
 	}
 
+    public Vector3 lastPos;
 	void Update () {
         Vector3 pos = transform.position ;
         if (Mathf.Abs(pos.x) > 4 || Mathf.Abs(pos.y) > 4 ) Events.DestroyCar(this);
 
         Vector3 frontPosition = pos;
         frontPosition += transform.forward / 10;
-        
 
         Vector3 leftPosition = (pos + transform.up/10) + transform.right / 10;
         CheckBorderHit(leftPosition, Color.blue, "left");
@@ -38,9 +49,14 @@ public class Car : MonoBehaviour {
 
         speed += (acceleration);
         if (speed > maxSpeed) speed = maxSpeed;
+        
+        pos += (forwardVector) * Time.deltaTime;
 
-        pos += transform.up * speed * Time.deltaTime;
+        realSpeed = Vector3.Distance(pos, transform.position)*100;
+
         transform.position = pos;
+
+        
 
         Vector3 rot = transform.localEulerAngles;
         rot = transform.localEulerAngles - rotation;
@@ -53,7 +69,12 @@ public class Car : MonoBehaviour {
         if (debug) DebugDraw.DrawSphere(coord, 0.1f, DebugColor);
 
         RaycastHit hit = GetCollision(coord, "center");
+
+        forwardVector = transform.up * speed;
+
         if (hit.transform == null) return;
+
+
         switch (hit.transform.gameObject.tag)
         {
             case "Bomb":
@@ -88,13 +109,14 @@ public class Car : MonoBehaviour {
                 teletransportable.SetOn(hit.transform.localPosition);
                 break;
             case "Cinta":
-                Vector3 pos = transform.position;
+                forwardVector += hit.transform.up;
+                //Vector3 pos = transform.position;
 
-                speed += (acceleration);
-                if (speed > maxSpeed) speed = maxSpeed;
+                //speed += (acceleration);
+                //if (speed > maxSpeed) speed = maxSpeed;
 
-                pos += hit.transform.up * speed * Time.deltaTime;
-                transform.position = pos;
+                //pos += hit.transform.up * speed * Time.deltaTime;
+                //transform.position = pos;
 
                 break;
         }
@@ -119,9 +141,9 @@ public class Car : MonoBehaviour {
         {
             RaycastHit hit = hits[i];
             Renderer rend = hit.transform.GetComponent<Renderer>();
-			Debug.Log(hit.transform.gameObject.name);
+		//	Debug.Log(hit.transform.gameObject.name);
             if (hit.transform.gameObject.name == "Plane"){
-			//	Debug.Log(GameManager.Instance.GetFloorHeight(hit));
+				Debug.Log(GameManager.Instance.GetFloorHeight(hit));
                 changeFloorHeight(GameManager.Instance.GetFloorHeight(hit), positionName);
 			}
             else hitToReturn = hit;
@@ -160,9 +182,19 @@ public class Car : MonoBehaviour {
         if (positionName == "center")
         {
             floorHeight = newFloorHeight;
-            speed += pendiente / 1.5f;
+            speed -= pendiente * pendiente_Speed;
+            if (pendiente > 0 && realSpeed < 0.8f) Turn_180();
         }
         
+    }
+    void Turn_180()
+    {
+        Debug.Log("TURN");
+        Vector3 angles = transform.localEulerAngles;
+
+        angles.z -= 180;
+
+        transform.localEulerAngles = angles;
     }
     private void turn(bool right)
     {
