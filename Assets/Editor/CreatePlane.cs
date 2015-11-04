@@ -161,6 +161,7 @@ public class CreatePlane : ScriptableWizard
 					}
 					tangents[index] = tangent;
 					uvs[index++] = new Vector2(x*uvFactorX, y*uvFactorY);
+
 				}
 			}
 			

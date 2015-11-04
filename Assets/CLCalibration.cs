@@ -28,7 +28,8 @@ public class CLCalibration : MonoBehaviour {
 			GetComponent<Camera>().transform.forward = new Vector3(calibration_loader.cl_model_view_matrix[8],calibration_loader.cl_model_view_matrix[9],calibration_loader.cl_model_view_matrix[10]);
 			GetComponent<Camera>().transform.up = new Vector3(calibration_loader.cl_model_view_matrix[4],calibration_loader.cl_model_view_matrix[5],calibration_loader.cl_model_view_matrix[6]);
 			GetComponent<Camera>().transform.right = new Vector3(calibration_loader.cl_model_view_matrix[0],calibration_loader.cl_model_view_matrix[1],calibration_loader.cl_model_view_matrix[2]);
-
+			GetComponent<Camera>().nearClipPlane = calibration_loader.depth_cam_near;
+			GetComponent<Camera>().farClipPlane = calibration_loader.depth_cam_far;
 
 			/*
 			Debug.Log(">> MODEL VIEW << ");

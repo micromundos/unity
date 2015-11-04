@@ -3,12 +3,21 @@ using System.Collections;
 using UnityOSC;
 using System.Net;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 public class OSCManager : MonoBehaviour {
 	
 	OSCClient	osc_client;
 	OSCServer	osc_server;
-	public List<MMTag>		tags;
+	//public List<MMTag>		tags;
+	private List<MMTag>	_tags;
+	public List<MMTag> tags{
+
+		[MethodImpl(MethodImplOptions.Synchronized)]
+		get {return _tags;}
+
+
+	}
 	public		bool	simular = false;
 	public PController pController;
 	public		float		RGB_WIDTH = 1024.0f;
@@ -16,12 +25,15 @@ public class OSCManager : MonoBehaviour {
 	public		SCalibrationLoader	calibration_loader;
 	// Use this for initialization
 	void Start () {
-		tags = new List<MMTag>();
+		_tags = new List<MMTag>();
 		osc_server = new OSCServer (7000);
 		osc_server.PacketReceivedEvent += OnPacketReceived;
 		osc_server.Connect ();
 	}
-	
+
+
+
+
 	// Update is called once per frame
 	void Update () {
 
@@ -47,7 +59,7 @@ public class OSCManager : MonoBehaviour {
 	void OnPacketReceived(OSCServer server, OSCPacket packet)
 	{
 
-		tags.Clear ();
+		_tags.Clear ();
 		if (packet.IsBundle ()) {
 			foreach (OSCMessage o in packet.Data) {
 				if(o.Address == "/tags")
@@ -130,7 +142,7 @@ public class OSCManager : MonoBehaviour {
 		tweak_loc (ref _tag.position);
 		_tag.position.x = Remap(_tag.position.x,0.0f,1.0f,-1.0f,1.0f);
 		_tag.position.y = Remap(_tag.position.y,0.0f,1.0f,1.0f,-1.0f);
-		tags.Add (_tag);
+		_tags.Add (_tag);
 
 		/*tloc.x *= rgb_width;
       tloc.y *= rgb_height;
@@ -190,7 +202,7 @@ public class OSCManager : MonoBehaviour {
 		_tag.position.y = Remap(((float)_data.Data [2]),0.0f,1.0f,1.0f,-1.0f);
 		_tag.rotation = ((float)_data.Data [3])* Mathf.Rad2Deg;
 		//Debug.Log ("Creo tag con id " + _data.Data [0].ToString ());
-		tags.Add (_tag);
+		_tags.Add (_tag);
 	}
 	
 	
@@ -199,8 +211,8 @@ public class OSCManager : MonoBehaviour {
 	{
 		int ret = -1;
 		int i = 0;
-		while (i<tags.Count && ret ==-1) {
-			if((tags[i] as MMTag).id == _id)
+		while (i<_tags.Count && ret ==-1) {
+			if((_tags[i] as MMTag).id == _id)
 			{
 				ret = i;
 			}

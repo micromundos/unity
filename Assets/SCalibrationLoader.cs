@@ -11,6 +11,18 @@ public class SCalibrationLoader : MonoBehaviour {
 	public Matrix4x4	cl_projection_matrix;
 	public Matrix4x4	cl_model_view_matrix;
 	public	bool	ready = false;
+	public float depth_cam_width;
+	public float depth_cam_height;
+	public float depth_cam_near;
+	public float depth_cam_far;
+	public float depth_cam_cx;
+	public float depth_cam_cy;
+	public float depth_cam_fx;
+	public float depth_cam_fy;
+	public float tex_width;
+	public float tex_height;
+	public float depth_cam_far_clamp;
+	public Camera game_camera;
 
 	void Start () {
 		tags_matrix = new Matrix4x4 ();
@@ -48,7 +60,20 @@ public class SCalibrationLoader : MonoBehaviour {
 			//Debug.Log(cl_model_view_matrix[i]);
 		}
 
-
+		depth_cam_width = get_val_by_id (lines, "depth_cam_width");
+		depth_cam_height = get_val_by_id (lines, "depth_cam_height");
+		depth_cam_near =get_val_by_id (lines, "depth_cam_near");
+		depth_cam_far =get_val_by_id (lines, "depth_cam_far");
+		depth_cam_cx =get_val_by_id (lines, "depth_cam_cx");
+		depth_cam_cy =get_val_by_id (lines, "depth_cam_cy");
+		depth_cam_fx =get_val_by_id (lines, "depth_cam_fx");
+		depth_cam_fy =get_val_by_id (lines, "depth_cam_fy");
+		tex_width = get_val_by_id (lines, "tex_width");
+		tex_height = get_val_by_id (lines, "tex_height");
+		depth_cam_far_clamp = get_val_by_id (lines, "depth_cam_far_clamp");
+		//game_camera.targetTexture.width = get_val_by_id (lines, "depth_");
+		game_camera.targetTexture.width = (int)tex_width;
+		game_camera.targetTexture.height = (int)tex_height;
 		ready = true;
 	}
 
