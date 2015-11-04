@@ -119,7 +119,7 @@ public class Car : MonoBehaviour {
         {
             RaycastHit hit = hits[i];
             Renderer rend = hit.transform.GetComponent<Renderer>();
-			Debug.Log(hit.transform.gameObject.name);
+			//Debug.Log(hit.transform.gameObject.name);
             if (hit.transform.gameObject.name == "Plane"){
 			//	Debug.Log(GameManager.Instance.GetFloorHeight(hit));
                 changeFloorHeight(GameManager.Instance.GetFloorHeight(hit), positionName);
@@ -143,7 +143,7 @@ public class Car : MonoBehaviour {
     }
     void changeFloorHeight(float newFloorHeight, string positionName)
     {
-        
+		return;
         pendiente = newFloorHeight - floorHeight;
         if (newFloorHeight != floorHeight)
         {

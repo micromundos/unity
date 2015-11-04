@@ -3,15 +3,16 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour {
 
-	public Camera camera;
+//	public Camera camera;
 
+	private Transform myTransform;
 	private float positionSpeed =  0.005f;
-    private float defaultFieldOfViewSpeed = 0.1f;
+   // private float defaultFieldOfViewSpeed = 0.1f;
 	private float rotationSpeed =  0.5f;
 
 	private Vector3 defaultPos;
 	private Vector3 defaultRot;
-    private float defaultFieldOfView;
+  //  private float defaultFieldOfView;
 
     private float _x;
 	private float _y;
@@ -20,13 +21,14 @@ public class CameraController : MonoBehaviour {
     private float _rot_y;
     private float _rot_z;
 
-    private float _field_of_view;
+  //  private float _field_of_view;
 
 	void Start()
 	{
-        defaultPos = camera.transform.localPosition;
-        defaultRot = camera.transform.localEulerAngles;
-        defaultFieldOfView = camera.fieldOfView;
+		myTransform = gameObject.transform;
+		defaultPos = myTransform.localPosition;
+		defaultRot = myTransform.localEulerAngles;
+       // defaultFieldOfView = camera.fieldOfView;
 
 		_x = PlayerPrefs.GetFloat ("_x");
 		_y = PlayerPrefs.GetFloat ("_y");
@@ -85,23 +87,23 @@ public class CameraController : MonoBehaviour {
 		else if(Input.GetKeyDown(KeyCode.C))
 			_rot_z -= rotationSpeed;
 		
-		if (Input.GetKeyDown(KeyCode.O))
-            _field_of_view += defaultFieldOfViewSpeed;
-        else if (Input.GetKeyDown(KeyCode.P))
-            _field_of_view -= defaultFieldOfViewSpeed;
+		//if (Input.GetKeyDown(KeyCode.O))
+       //     _field_of_view += defaultFieldOfViewSpeed;
+       // else if (Input.GetKeyDown(KeyCode.P))
+         //   _field_of_view -= defaultFieldOfViewSpeed;
 
-        if (camera.transform.localPosition.y != _y)
+		if (myTransform.localPosition.y != _y)
             PlayerPrefs.SetFloat("_y", _y);
-        if (camera.transform.localPosition.x != _x)
+        if (myTransform.localPosition.x != _x)
             PlayerPrefs.SetFloat("_x", _x);
-        if (camera.transform.localPosition.z != _z)
+        if (myTransform.localPosition.z != _z)
             PlayerPrefs.SetFloat("_z", _z);
 
-        camera.transform.localPosition = defaultPos + new Vector3(_x, _y, _z);
-        camera.transform.localEulerAngles = new Vector3(defaultRot.x + _rot_x, defaultRot.y + _rot_y, defaultRot.z + _rot_z);
+        myTransform.localPosition = defaultPos + new Vector3(_x, _y, _z);
+        myTransform.localEulerAngles = new Vector3(defaultRot.x + _rot_x, defaultRot.y + _rot_y, defaultRot.z + _rot_z);
 
-        if (camera.fieldOfView != defaultFieldOfView + _field_of_view)
-            camera.fieldOfView = defaultFieldOfView + _field_of_view;
+       // if (camera.fieldOfView != defaultFieldOfView + _field_of_view)
+        //    camera.fieldOfView = defaultFieldOfView + _field_of_view;
 
 	}
 }

@@ -41,11 +41,11 @@ public class SCalibrationLoader : MonoBehaviour {
 		lines = cl_calib_string.Split('\n');
 		cl_projection_matrix = PerspectiveOffCenter(get_val_by_id(lines,"proj_frustum_left"), get_val_by_id(lines,"proj_frustum_right"), get_val_by_id(lines,"proj_frustum_bottom"),get_val_by_id(lines,"proj_frustum_top"), get_val_by_id(lines,"proj_near"),get_val_by_id(lines,"proj_far"));
 
-		Debug.Log ("*** MODEL VIEW ***");
+		//Debug.Log ("*** MODEL VIEW ***");
 		cl_model_view_matrix = new Matrix4x4 ();
 		for (int i=0; i<16; i++) {
 			cl_model_view_matrix[i] = get_val_by_id(lines,"proj_modelview_matrix_" + i.ToString());
-			Debug.Log(cl_model_view_matrix[i]);
+			//Debug.Log(cl_model_view_matrix[i]);
 		}
 
 

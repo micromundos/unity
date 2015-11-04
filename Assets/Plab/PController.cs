@@ -85,12 +85,17 @@ public class PController : MonoBehaviour {
     {
 
         ObjectsData.Clear();
+		if (osc_manager == null || osc_manager.tags == null) {
+			Debug.Log ("osc manager o tags null");
+			return;
+		}
         foreach (MMTag data in osc_manager.tags)
         {
             ObjectData o = new ObjectData();
             o.id = (int.Parse(data.id));
             o.position = data.position;
             o.rotation = (int)data.rotation;
+			if(o.id<20)
             ObjectsData.Add(o);
 
         }
