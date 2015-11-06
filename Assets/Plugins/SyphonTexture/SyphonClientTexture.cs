@@ -40,6 +40,7 @@ public class SyphonClientTexture : MonoBehaviour {
 		//this next line creates a syphon instance if it doesn't already exist
 		Syphon instance = Syphon.Instance;
 		setupTexture();
+		EnableCallbacks();
 	}
 	
 	void OnDestroy(){
@@ -78,15 +79,18 @@ public class SyphonClientTexture : MonoBehaviour {
 	//handle applying the client texture to your object whichever way you please.
 	public virtual void ApplyTexture(){
 		if(clientObject != null && clientObject.Initialized){
+			if (clientObject.AttachedTexture == null) {
+				Debug.Log("clientObject.AttachedTexture is null");
+				return;
+			}
 			Material[] matArray = GetComponent<Renderer>().sharedMaterials;			
 			for(int i = 0; i < matArray.Length; i++){
 				matArray[i].mainTexture = clientObject.AttachedTexture;	
 			}
-			GetComponent<Renderer>().sharedMaterial.mainTexture.wrapMode = TextureWrapMode.Repeat;
+			//GetComponent<Renderer>().sharedMaterial.mainTexture.wrapMode = TextureWrapMode.Repeat;
 		}
 	}
 
-	
 	public void handleRetireClient(SyphonClientObject client){
 		if(client == clientObject){
 			//your syphonClient may soon go null as it is either 1) being destroyed from the clients list as there is no more reason to keep it alive or 2) the server has disappeared
@@ -107,7 +111,7 @@ public class SyphonClientTexture : MonoBehaviour {
 	}
 
 	public void OnEnable(){
-		EnableCallbacks();
+		//EnableCallbacks();
 	}
 	
 	private void EnableCallbacks(){

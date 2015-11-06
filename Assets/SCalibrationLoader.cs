@@ -135,11 +135,4 @@ public class SCalibrationLoader : MonoBehaviour {
 		return m;
 	}
 
-
-
-
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

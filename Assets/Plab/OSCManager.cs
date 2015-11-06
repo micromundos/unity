@@ -33,14 +33,6 @@ public class OSCManager : MonoBehaviour {
 
 
 
-
-	// Update is called once per frame
-	void Update () {
-
-
-		
-	}
-
 	/*	CHILITAGS /tags PACKAGE FORMAT */
 	//	id
 	//	size

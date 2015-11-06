@@ -18,34 +18,20 @@ Shader "Custom/CamaraLucidaShader" {
          uniform sampler2D	render_tex;
  		 uniform sampler2D	depth_tex;
  		 
-//		 uniform float near;
-//		 uniform float far;
-//		 uniform float far_clamp;
-//		 uniform float width;
-//		 uniform float height;
-//		 uniform float fx;
-//		 uniform float fy;
-//		 uniform float cx;
-//		 uniform float cy;
-//		 uniform float xoff;
-//		 uniform float tex_width;
-//		 uniform float tex_height;
-//		 uniform float depth_cam_far_clamp;
+		 uniform float near;
+		 uniform float far;
+		 uniform float far_clamp;
+		 uniform float width;
+		 uniform float height;
+		 uniform float fx;
+		 uniform float fy;
+		 uniform float cx;
+		 uniform float cy;
+		 uniform float xoff;
+		 uniform float tex_width;
+		 uniform float tex_height;
 		 
 		 float unity_plane_z_offset = 1000.0;
-		 
-		 float width = 640.;
-		 float height = 480.;
-		 float near = 200.;
-		 float far = 6000.;
-		 float cx = 300.;
-		 float cy = 260.;
-		 float fx = 536.;
-		 float fy = 542.;
-		 float xoff = 8.;
-		 float far_clamp = 5000.;
-		 float tex_width = 1536.;
-		 float tex_height = 1152.;
 		 
 //		 varying vec3 p3;
 		 
@@ -61,17 +47,20 @@ Shader "Custom/CamaraLucidaShader" {
  		 
          void main() // all vertex shaders define a main() function
          {
-         	vec3 xxx = gl_Vertex.xyz; // WTF ????!!!!
+         	vec4 xxx = gl_Vertex; // WTF ????!!!!
          	
         	gl_TexCoord[0] = gl_MultiTexCoord0;
 
             vec2 tc = gl_TexCoord[0].st;
-            vec2 d2 = vec2(tc.x * width, tc.y * height);
+            vec2 d2 = vec2( (tc.x * width), (tc.y * height) );
 			
-			float zmm = unity_plane_z_offset;
-//			float zmm = (texture2D( depth_tex, d2 ).r * far_clamp);
+//			float zmm = unity_plane_z_offset;
+//			float zmm = texture2D( depth_tex, d2 ).r * far_clamp;
+			float zmm = texture2D(depth_tex, tc).r * far_clamp;
 //			zmm = clamp( ( zmm < epsilon ? far_clamp : zmm ), 0.0, far_clamp );
 			vec3 p3 = unproject(d2,zmm);
+//			vec3 p3 = vec3( tc.x * 1000.0-500.0, tc.y * 1000.0-500.0, zmm );
+//			vec3 p3 = vec3(xxx);
 			
 			p3.z -= unity_plane_z_offset;
 			
@@ -109,8 +98,14 @@ Shader "Custom/CamaraLucidaShader" {
          void main()
          {
          	
-         	vec4 render_color = texture2D(render_tex,gl_TexCoord[0].st);
-//         	vec2 tc = gl_TexCoord[0].st;
+         	vec2 tc = gl_TexCoord[0].st;
+         	
+//         	float zmm = texture2D(depth_tex, tc).r;
+//         	vec4 render_color = vec4( zmm, zmm, zmm, 1.0 );
+         	
+//         	vec4 render_color = texture2D(depth_tex, tc);
+         	vec4 render_color = texture2D(render_tex, tc);
+
 //            vec4 render_color = vec4(
 ////	            lerp2d(tc.x, 0.0, 1.0, 0.0, 1.0),
 ////	            lerp2d(tc.y, 0.0, 1.0, 0.0, 1.0),

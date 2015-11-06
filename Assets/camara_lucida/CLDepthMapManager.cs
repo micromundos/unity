@@ -10,27 +10,28 @@ public class CLDepthMapManager : MonoBehaviour {
 
 	void Start () {
 
-		syphon_client = GetComponent<SyphonClientTexture> ();
+
 
 	}
-	
 	// Update is called once per frame
 	void Update () {
 
+		syphon_client = GetComponent<SyphonClientTexture> ();
 		RenderTexture depth_texture = syphon_client.clientObject.AttachedTexture;
-		//syphon_holder.GetComponent<Renderer> ().material.SetTexture ("_DepthTex", texture);
-		GetComponent<Renderer>().material.SetTexture("depth_tex",depth_texture);
-		GetComponent<Renderer> ().material.SetFloat ("depth_cam_width", calibration_loader.depth_cam_width);
-		GetComponent<Renderer> ().material.SetFloat ("depth_cam_height", calibration_loader.depth_cam_height);
-		GetComponent<Renderer> ().material.SetFloat ("depth_cam_near", calibration_loader.depth_cam_near);
-		GetComponent<Renderer> ().material.SetFloat ("depth_cam_far", calibration_loader.depth_cam_far);
-		GetComponent<Renderer> ().material.SetFloat ("depth_cam_cx", calibration_loader.depth_cam_cx);
-		GetComponent<Renderer> ().material.SetFloat ("depth_cam_cy", calibration_loader.depth_cam_cy);
-		GetComponent<Renderer> ().material.SetFloat ("depth_cam_fx", calibration_loader.depth_cam_fx);
-		GetComponent<Renderer> ().material.SetFloat ("depth_cam_fy", calibration_loader.depth_cam_fy);
-		GetComponent<Renderer> ().material.SetFloat ("tex_width", calibration_loader.tex_width);
-		GetComponent<Renderer> ().material.SetFloat ("tex_height", calibration_loader.tex_height);
-		GetComponent<Renderer> ().material.SetFloat ("depth_cam_far_clamp", calibration_loader.depth_cam_far_clamp);
+			//syphon_holder.GetComponent<Renderer> ().material.SetTexture ("_DepthTex", texture);
+			GetComponent<Renderer> ().material.SetTexture ("depth_tex", depth_texture);
+			GetComponent<Renderer> ().material.SetFloat ("width", calibration_loader.depth_cam_width);
+			GetComponent<Renderer> ().material.SetFloat ("height", calibration_loader.depth_cam_height);
+			GetComponent<Renderer> ().material.SetFloat ("near", calibration_loader.depth_cam_near);
+			GetComponent<Renderer> ().material.SetFloat ("far", calibration_loader.depth_cam_far);
+			GetComponent<Renderer> ().material.SetFloat ("cx", calibration_loader.depth_cam_cx);
+			GetComponent<Renderer> ().material.SetFloat ("cy", calibration_loader.depth_cam_cy);
+			GetComponent<Renderer> ().material.SetFloat ("fx", calibration_loader.depth_cam_fx);
+			GetComponent<Renderer> ().material.SetFloat ("fy", calibration_loader.depth_cam_fy);
+			GetComponent<Renderer> ().material.SetFloat ("tex_width", calibration_loader.tex_width);
+			GetComponent<Renderer> ().material.SetFloat ("tex_height", calibration_loader.tex_height);
+			GetComponent<Renderer> ().material.SetFloat ("far_clamp", calibration_loader.depth_cam_far_clamp);
+
 
 	
 	
