@@ -19,6 +19,7 @@ public class SceneObject : MonoBehaviour {
 		int rotationNormal = 0;
 		int sumas = 0;
 
+		return;
         if (disableRotation) return;
 
         
@@ -34,7 +35,8 @@ public class SceneObject : MonoBehaviour {
 	
     public void SetRotation(int rotation)
     {
-        rotations.Add(rotation);
+		transform.localEulerAngles = new Vector3(0, 0, -rotation);
+		//rotations.Add(rotation);
     }
 
 }

@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour {
 	public SyphonParser	syphon_parser;
     public int totalCars;
 
+
+
     public static GameManager Instance
     {
         get
@@ -63,10 +65,15 @@ public class GameManager : MonoBehaviour {
             Vector2 pixelUV = hit.textureCoord;
             pixelUV.x *= syphon_parser.SurfaceMap().width;
             pixelUV.y *= syphon_parser.SurfaceMap().height;
+
+
             if((int)pixelUV.x > -1 && (int)pixelUV.x < syphon_parser.SurfaceMap().width && (int)pixelUV.y > -1 && (int)pixelUV.y < syphon_parser.SurfaceMap().height){
 
                 Color color = syphon_parser.SurfaceMap().GetPixel ((int)pixelUV.x, (int)pixelUV.y);
-                return color.r + color.g + color.b;
+
+
+				//Debug.Log("floor height:"  + (int)pixelUV.x + " " + (int)pixelUV.y + " color: " + color);
+				return Remap(color.r,settings.MIN_FLOOR_INPUT,settings.MAX_FLOOR_INPUT,0.0f,1.0f);
             }else{
                 return 0;
             }
@@ -76,4 +83,8 @@ public class GameManager : MonoBehaviour {
         }
 
     }
+
+	float Remap (this float value, float from1, float to1, float from2, float to2) {
+		return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+	}
 }

@@ -5,7 +5,8 @@ public class Settings : MonoBehaviour {
 	
 	public bool DEBUG;
 	public int maxCars;
-	
+
+	public float surfaceMaxHeight;
 	public float pendiente_Speed; // 1.5f;
 	public float car_Turn_180_lowerSpeed; // = 0.27f;
 	public float car_acceleration;// = 0.005f;
@@ -13,6 +14,9 @@ public class Settings : MonoBehaviour {
 	
 	public float fixedPositionSpeed;
 	public float fixedRotationSpeed;
+
+	public	float MIN_FLOOR_INPUT;
+	public	float MAX_FLOOR_INPUT;
 	
 }
 

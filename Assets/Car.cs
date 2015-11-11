@@ -13,7 +13,8 @@ public class Car : MonoBehaviour {
 	public float smoothRotation;
 	public float floorHeight;
 	private bool debug;
-	
+
+	private float surfaceMaxHeight;
 	private float car_Turn_180_lowerSpeed;
 	private float pendiente_Speed;
 	private float speed;
@@ -23,6 +24,7 @@ public class Car : MonoBehaviour {
 	private Vector3 forwardVector;
 	
 	public void Init (int id) {
+		surfaceMaxHeight =  GameManager.Instance.settings.surfaceMaxHeight;
 		pendiente_Speed = GameManager.Instance.settings.pendiente_Speed;
 		car_Turn_180_lowerSpeed = GameManager.Instance.settings.car_Turn_180_lowerSpeed;
 		acceleration = GameManager.Instance.settings.car_acceleration;
@@ -36,7 +38,7 @@ public class Car : MonoBehaviour {
 	public Vector3 lastPos;
 	void Update () {
 		Vector3 pos = transform.position ;
-		if (Mathf.Abs(pos.x) > 4 || Mathf.Abs(pos.y) > 4 ) Events.DestroyCar(this);
+		//if (Mathf.Abs(pos.x) > 4 || Mathf.Abs(pos.y) > 4 ) Events.DestroyCar(this);
 		
 		Vector3 frontPosition = pos;
 		frontPosition += transform.forward / 10;
@@ -50,7 +52,7 @@ public class Car : MonoBehaviour {
 		speed += (acceleration);
 		if (speed > maxSpeed) speed = maxSpeed;
 		
-		pos += (forwardVector) * Time.deltaTime;
+		pos += ((forwardVector/5)*speed) * Time.deltaTime;
 		
 		realSpeed = Vector3.Distance(pos, transform.position)*100;
 		
@@ -78,7 +80,7 @@ public class Car : MonoBehaviour {
 		switch (hit.transform.gameObject.tag)
 		{
 		case "Bomb":
-			Events.DestroyCar(this);
+			//Events.DestroyCar(this);
 			break;
 		case "Star":
 			Events.OnStarCatched(hit.transform.gameObject);
@@ -142,37 +144,26 @@ public class Car : MonoBehaviour {
 			RaycastHit hit = hits[i];
 			Renderer rend = hit.transform.GetComponent<Renderer>();
 			//	Debug.Log(hit.transform.gameObject.name);
-			if (hit.transform.gameObject.name == "Plane"){
+			if (hit.transform.gameObject.name == "SyphonReceiver"){
 				//Debug.Log(GameManager.Instance.GetFloorHeight(hit));
-				//changeFloorHeight(GameManager.Instance.GetFloorHeight(hit), positionName);
+				float pixelHeight =  GameManager.Instance.GetFloorHeight(hit);
+			//	print ("Pixel hiehgt:  " +  pixelHeight +  "    pos:  " + transform.position);
+				changeFloorHeight(pixelHeight, positionName);
 			}
 			else hitToReturn = hit;
 		}
 		return hitToReturn;
-		
-		// RaycastHit hit = new RaycastHit();
-		//Ray ray = new Ray();
-		//ray.origin = coord;
-		//ray.direction = Vector3.down;
-		//if (Physics.RaycastAll(ray, out hit))
-		//{
-		//    if (hit.transform.gameObject.name == "Plane")
-		//         changeFloorHeight(GameManager.Instance.GetFloorHeight(hit), positionName);
-		
-		//   // Vector3 hitPos = Camera.main.WorldToScreenPoint(hit.point);
-		//}
-		//return hit;
 	}
 	void changeFloorHeight(float newFloorHeight, string positionName)
 	{
-		
-		pendiente = newFloorHeight - floorHeight;
+		pendiente = (newFloorHeight) - floorHeight;
 		if (newFloorHeight != floorHeight)
 		{
 			float heightDifference = Mathf.Abs(pendiente);
-			if (heightDifference > 0.5f)
+			//Debug.Log ("pendiente: " + pendiente + "  heightDifference:  " + heightDifference);
+			if (heightDifference > surfaceMaxHeight)
 			{
-				print("heightDifference " + heightDifference);
+				//print("heightDifference " + heightDifference);
 				if (positionName == "right") 
 					turn(true);
 				else if (positionName == "left")
@@ -183,12 +174,14 @@ public class Car : MonoBehaviour {
 		{
 			floorHeight = newFloorHeight;
 			speed -= pendiente * pendiente_Speed;
-			if (pendiente > 0 && realSpeed < 0.8f) Turn_180();
+			if (pendiente > 0.05f && realSpeed < surfaceMaxHeight) Turn_180();
 		}
+		//
 		
 	}
 	void Turn_180()
 	{
+		//return;
 		Vector3 angles = transform.localEulerAngles;
 		
 		angles.z -= 180;
@@ -197,6 +190,7 @@ public class Car : MonoBehaviour {
 	}
 	private void turn(bool right)
 	{
+		//return;
 		Vector3 angles = transform.localEulerAngles;
 		
 		if (right)
