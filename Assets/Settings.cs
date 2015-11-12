@@ -6,6 +6,7 @@ public class Settings : MonoBehaviour {
 	public bool DEBUG;
 	public int maxCars;
 
+	public float pendienteFrena;
 	public float surfaceMaxHeight;
 	public float pendiente_Speed; // 1.5f;
 	public float car_Turn_180_lowerSpeed; // = 0.27f;

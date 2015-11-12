@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 
 public class PController : MonoBehaviour {
-
+	public Vector3 fixedPosition2;
     public Vector2 fixedPosition;
 	public OSCManager	osc_manager;
 	//public List<MMTag> ObjectsData;
@@ -28,32 +28,6 @@ public class PController : MonoBehaviour {
 
     public GameObject ObjectsContiner;
 
-	void Start()
-	{
-		fixedPositionSpeed = GetComponent<Settings>().fixedPositionSpeed;
-		fixedRotationSpeed = GetComponent<Settings>().fixedRotationSpeed;
-		/*
-		foreach (ObjectData data in ObjectsData)
-		{
-			switch (data.id)
-			{
-			case 1: data.tag = "Creator"; break;
-			case 2: data.tag = "Dobla"; break;
-			case 3: data.tag = "Tele"; break;
-			case 4: data.tag = "Cinta"; break;
-			case 5: data.tag = "DoblaRandom"; break;
-			case 6: data.tag = "Bomb"; break;
-			case 7: data.tag = "River"; break;
-			}
-		}
-
-		foreach (GameObject go in objects)
-		{
-			if (go.tag == data.tag && go.transform.localPosition.x > 6)
-				return go;
-		}
-		return null;*/
-	}
 
 
 
@@ -95,7 +69,7 @@ public class PController : MonoBehaviour {
             o.id = (int.Parse(data.id));
             o.position = data.position;
             o.rotation = (int)data.rotation;
-			if(o.id<20)
+			if(o.id<30)
             ObjectsData.Add(o);
 
         }
@@ -115,8 +89,8 @@ public class PController : MonoBehaviour {
             go.inUse = true;
 			
 			Vector3 fixedDataPosition = new Vector3(data.position.x * fixedPosition.x, data.position.y * fixedPosition.y, -0.2f);
-			if (data.tag == "River")
-				fixedDataPosition.z = 0;
+			fixedDataPosition += fixedPosition2;
+
 			Vector3 newRotation = new Vector3(0, 0, data.rotation);
 			
 		//	Debug.Log(data.rotation);
@@ -128,7 +102,8 @@ public class PController : MonoBehaviour {
 			else
 			{
 				//go.transform.localPosition = Vector3.Lerp(go.transform.localPosition, fixedDataPosition, fixedPositionSpeed);
-				go.transform.localPosition =  fixedDataPosition;
+				//go.transform.localPosition =  fixedDataPosition;
+				go.SetPosition(fixedDataPosition);
                 go.SetRotation(data.rotation);
 			}            
 		}

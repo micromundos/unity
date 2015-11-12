@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Car : MonoBehaviour {
-	
+public class Car : MonoBehaviour
+{
+	public Color[] colors;
 	public Sprite[] sprites;
-	public float pendiente;    
+	public float pendiente;
 	public float realSpeed;
 	public float acceleration;
 	public float maxSpeed;
@@ -13,18 +14,25 @@ public class Car : MonoBehaviour {
 	public float smoothRotation;
 	public float floorHeight;
 	private bool debug;
-
+	
 	private float surfaceMaxHeight;
 	private float car_Turn_180_lowerSpeed;
 	private float pendiente_Speed;
 	private float speed;
+	private float pendienteFrena;
+
+	private bool collision_RIGHT;
+	private bool collision_FORWARD;
+	private bool collision_LEFT;
 	
 	private Teletransportable teletransportable;
 	
 	private Vector3 forwardVector;
 	
-	public void Init (int id) {
-		surfaceMaxHeight =  GameManager.Instance.settings.surfaceMaxHeight;
+	public void Init(int id)
+	{
+		pendienteFrena= GameManager.Instance.settings.pendienteFrena;
+		surfaceMaxHeight = GameManager.Instance.settings.surfaceMaxHeight;
 		pendiente_Speed = GameManager.Instance.settings.pendiente_Speed;
 		car_Turn_180_lowerSpeed = GameManager.Instance.settings.car_Turn_180_lowerSpeed;
 		acceleration = GameManager.Instance.settings.car_acceleration;
@@ -33,42 +41,66 @@ public class Car : MonoBehaviour {
 		debug = GameManager.Instance.settings.DEBUG;
 		teletransportable = GetComponent<Teletransportable>();
 		GetComponentInChildren<SpriteRenderer>().sprite = sprites[id];
+		GetComponentInChildren<TrailRenderer>().material.color = colors[id];
 	}
 	
 	public Vector3 lastPos;
-	void Update () {
-		Vector3 pos = transform.position ;
+	void Update()
+	{
+		collision_RIGHT = false;
+		collision_FORWARD = false;
+		collision_LEFT = false;
+
+		Vector3 pos = transform.position;
 		//if (Mathf.Abs(pos.x) > 4 || Mathf.Abs(pos.y) > 4 ) Events.DestroyCar(this);
 		
 		Vector3 frontPosition = pos;
 		frontPosition += transform.forward / 10;
 		
-		Vector3 leftPosition = (pos + transform.up/10) + transform.right / 10;
+		Vector3 leftPosition = (pos + transform.up / 10) + transform.right / 7;
 		CheckBorderHit(leftPosition, Color.blue, "left");
 		
-		Vector3 rightPosition = (pos + transform.up/10) - transform.right / 10;
+		Vector3 rightPosition = (pos + transform.up / 10) - transform.right / 7;
 		CheckBorderHit(rightPosition, Color.green, "right");
+		
+		Vector3 forwardPosition = pos + transform.up / 4;
+		CheckBorderHit(forwardPosition, Color.green, "forward");
 		
 		speed += (acceleration);
 		if (speed > maxSpeed) speed = maxSpeed;
 		
-		pos += ((forwardVector/5)*speed) * Time.deltaTime;
+		pos += ((forwardVector / 5) * speed) * Time.deltaTime;
 		
-		realSpeed = Vector3.Distance(pos, transform.position)*100;
+		realSpeed = Vector3.Distance(pos, transform.position) * 100;
 		
 		transform.position = pos;
-		
-		
-		
+
 		Vector3 rot = transform.localEulerAngles;
 		rot = transform.localEulerAngles - rotation;
 		
 		CheckCenterHit(frontPosition, Color.red);
+
+		if (realSpeed < 0.08f && pendiente > 0) {
+			turn(180);
+			return;
+		}
+		if (collision_FORWARD) {
+			 if (collision_RIGHT)
+				turn (-20);
+			else if (collision_LEFT)
+				turn (20);
+			if(speed > 0.15)
+				speed/=1.4f;
+		} else
+		if (collision_RIGHT)
+			turn (-20);
+		else if (collision_LEFT)
+			turn (20);
 	}
 	string lastHitObjectTag;
-	void CheckCenterHit(Vector3 coord, Color DebugColor)
+	void CheckCenterHit(Vector3 coord, Color _DebugColor)
 	{
-		if (debug) DebugDraw.DrawSphere(coord, 0.1f, DebugColor);
+		if (debug) DebugDraw.DrawSphere(coord, 0.1f, _DebugColor);
 		
 		RaycastHit hit = GetCollision(coord, "center");
 		
@@ -80,6 +112,7 @@ public class Car : MonoBehaviour {
 		switch (hit.transform.gameObject.tag)
 		{
 		case "Bomb":
+			speed *=10;
 			//Events.DestroyCar(this);
 			break;
 		case "Star":
@@ -92,7 +125,7 @@ public class Car : MonoBehaviour {
 			//transform.rotation = Quaternion.Slerp(transform.rotation, hit.transform.rotation, Time.deltaTime * smoothRotation);
 			break;
 		case "River":
-			if (floorHeight<0.1f &&  lastHitObjectTag != hit.transform.gameObject.tag)
+			if (floorHeight < 0.1f && lastHitObjectTag != hit.transform.gameObject.tag)
 			{
 				Vector3 rot = transform.localEulerAngles;
 				rot.z = rot.z - 180;
@@ -135,7 +168,7 @@ public class Car : MonoBehaviour {
 		RaycastHit[] hits;
 		hits = Physics.RaycastAll(coord, Vector3.down, 100.0F);
 		if (hits.Length == 0)
-			return new RaycastHit ();
+			return new RaycastHit();
 		
 		
 		RaycastHit hitToReturn = hits[0];
@@ -144,61 +177,50 @@ public class Car : MonoBehaviour {
 			RaycastHit hit = hits[i];
 			Renderer rend = hit.transform.GetComponent<Renderer>();
 			//	Debug.Log(hit.transform.gameObject.name);
-			if (hit.transform.gameObject.name == "SyphonReceiver"){
+			if (hit.transform.gameObject.name == "SyphonReceiver")
+			{
 				//Debug.Log(GameManager.Instance.GetFloorHeight(hit));
-				float pixelHeight =  GameManager.Instance.GetFloorHeight(hit);
-			//	print ("Pixel hiehgt:  " +  pixelHeight +  "    pos:  " + transform.position);
+				float pixelHeight = GameManager.Instance.GetFloorHeight(hit);
+				//	print ("Pixel hiehgt:  " +  pixelHeight +  "    pos:  " + transform.position);
 				changeFloorHeight(pixelHeight, positionName);
 			}
 			else hitToReturn = hit;
 		}
 		return hitToReturn;
 	}
-	void changeFloorHeight(float newFloorHeight, string positionName)
+	void changeFloorHeight(float checkingFloorHeight, string positionName)
 	{
-		pendiente = (newFloorHeight) - floorHeight;
-		if (newFloorHeight != floorHeight)
+		
+		if (positionName == "center")
 		{
-			float heightDifference = Mathf.Abs(pendiente);
+			floorHeight = checkingFloorHeight;
+		}
+
+			if (positionName == "forward")
+			{
+				pendiente = checkingFloorHeight - floorHeight;
+				speed -= (pendiente/pendienteFrena) * pendiente_Speed;
+			}
+		float heightDifference = Mathf.Abs(floorHeight - checkingFloorHeight);
 			//Debug.Log ("pendiente: " + pendiente + "  heightDifference:  " + heightDifference);
 			if (heightDifference > surfaceMaxHeight)
 			{
-				//print("heightDifference " + heightDifference);
-				if (positionName == "right") 
-					turn(true);
+				if (positionName == "right")
+					collision_RIGHT = true;
 				else if (positionName == "left")
-					turn(false);
-			} 
-		}
-		if (positionName == "center")
-		{
-			floorHeight = newFloorHeight;
-			speed -= pendiente * pendiente_Speed;
-			if (pendiente > 0.05f && realSpeed < surfaceMaxHeight) Turn_180();
-		}
-		//
+					collision_LEFT = true;
+				else if (positionName == "forward")
+					collision_FORWARD = true;
+			}
+
+
 		
 	}
-	void Turn_180()
+	private void turn(float _y)
 	{
 		//return;
 		Vector3 angles = transform.localEulerAngles;
-		
-		angles.z -= 180;
-		
-		transform.localEulerAngles = angles;
-	}
-	private void turn(bool right)
-	{
-		//return;
-		Vector3 angles = transform.localEulerAngles;
-		
-		if (right)
-			angles.z -= 10;
-		else
-			angles.z += 10;
-		
+			angles.z += _y;
 		transform.localEulerAngles = angles;
 	}
 }
-

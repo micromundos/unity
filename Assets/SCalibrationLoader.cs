@@ -23,6 +23,10 @@ public class SCalibrationLoader : MonoBehaviour {
 	public float tex_height;
 	public float depth_cam_far_clamp;
 	public Camera game_camera;
+	public Vector3 proj_loc;
+	public Vector3 proj_fwd;
+	public Vector3 proj_up;
+	public Vector3 proj_left;
 
 	void Start () {
 		tags_matrix = new Matrix4x4 ();
@@ -59,6 +63,26 @@ public class SCalibrationLoader : MonoBehaviour {
 			cl_model_view_matrix[i] = get_val_by_id(lines,"proj_modelview_matrix_" + i.ToString());
 			//Debug.Log(cl_model_view_matrix[i]);
 		}
+
+		proj_loc = new Vector3(
+			get_val_by_id(lines,"proj_loc_x"),
+			get_val_by_id(lines,"proj_loc_y"),
+			get_val_by_id(lines,"proj_loc_z"));
+
+		proj_fwd = new Vector3(
+			get_val_by_id(lines,"proj_fwd_x"),
+			get_val_by_id(lines,"proj_fwd_y"),
+			get_val_by_id(lines,"proj_fwd_z"));
+
+		proj_up = new Vector3(
+			get_val_by_id(lines,"proj_up_x"),
+			get_val_by_id(lines,"proj_up_y"),
+			get_val_by_id(lines,"proj_up_z"));
+
+		proj_left = new Vector3(
+			get_val_by_id(lines,"proj_left_x"),
+			get_val_by_id(lines,"proj_left_y"),
+			get_val_by_id(lines,"proj_left_z"));
 
 		depth_cam_width = get_val_by_id (lines, "depth_cam_width");
 		depth_cam_height = get_val_by_id (lines, "depth_cam_height");

@@ -32,9 +32,15 @@ public class SceneObject : MonoBehaviour {
             rotations.Clear();
         }
 	}
-	
-    public void SetRotation(int rotation)
+	public void SetPosition(Vector3 pos)
+	{
+		if (tag == "River")
+			pos.z = 0;
+		transform.localPosition = pos;
+	}
+	public void SetRotation(int rotation)
     {
+		if(tag !="DoblaRandom" && tag !="River")
 		transform.localEulerAngles = new Vector3(0, 0, -rotation);
 		//rotations.Add(rotation);
     }

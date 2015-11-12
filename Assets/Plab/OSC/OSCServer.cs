@@ -17,7 +17,7 @@
 // 	  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // 	  IN THE SOFTWARE.
 //
-
+using UnityEngine;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -95,7 +95,9 @@ namespace UnityOSC
 		/// </summary>
 		public void Connect()
 		{
-			if(this._udpClient != null) Close();
+			if (this._udpClient != null) {
+				Close ();
+			}
 			
 			try
 			{
@@ -128,7 +130,7 @@ namespace UnityOSC
 		private void Receive()
 		{
 			IPEndPoint ip = null;
-			
+
 			try
 			{
 				byte[] bytes = _udpClient.Receive(ref ip);
@@ -139,7 +141,10 @@ namespace UnityOSC
 
                     _lastReceivedPacket = packet;
 
+
+
                     PacketReceivedEvent(this, _lastReceivedPacket);	
+
 				}
 			}
 			catch{
@@ -154,6 +159,7 @@ namespace UnityOSC
 		{
 			while( true )
 			{
+				//Debug.Log("whil tru");
 				Receive();
                 Thread.Sleep(10);
 			}

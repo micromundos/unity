@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 	void Start () {
+		Screen.SetResolution (1280, 768, true);
         mInstance = this;
         settings = GetComponent<Settings>();
         Events.AddNewCar += AddNewCar;

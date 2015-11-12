@@ -6,15 +6,16 @@ public class CameraController : MonoBehaviour {
 //	public Camera camera;
 
 	private Transform myTransform;
-	private float defaultOrthoSizeSpeed = 0.1f;
-	private float positionSpeed =  0.1f;
+//	private float defaultOrthoSizeSpeed = 0.1f;
+	private float rotationSpeed =  0.1f;
    // private float defaultFieldOfViewSpeed = 0.1f;
 //	private float rotationSpeed =  0.5f;
 
-	private float defaultOrthoSize;
-	private float _orthoSize;
+	//private float defaultOrthoSize;
 
-	private Vector3 defaultPos;
+//	private float _orthoSize;
+
+	private Vector3 defaultRot;
 //	private Vector3 defaultRot;
   //  private float defaultFieldOfView;
 
@@ -30,7 +31,7 @@ public class CameraController : MonoBehaviour {
 	void Start()
 	{
 		myTransform = gameObject.transform;
-		defaultPos = myTransform.localPosition;
+		defaultRot = myTransform.localEulerAngles;
 //		defaultRot = myTransform.localEulerAngles;
        // defaultFieldOfView = camera.fieldOfView;
 
@@ -38,7 +39,7 @@ public class CameraController : MonoBehaviour {
 		_y = PlayerPrefs.GetFloat ("_y");
 		_z = PlayerPrefs.GetFloat ("_z");
 
-		_orthoSize = PlayerPrefs.GetFloat ("_orthoSize");
+		//_orthoSize = PlayerPrefs.GetFloat ("_orthoSize");
 
 //        _rot_x = PlayerPrefs.GetFloat("_rot_x");
 //        _rot_y = PlayerPrefs.GetFloat("_rot_y");
@@ -51,7 +52,7 @@ public class CameraController : MonoBehaviour {
         PlayerPrefs.SetFloat("_x", _x);
         PlayerPrefs.SetFloat("_y", _y);
         PlayerPrefs.SetFloat("_z", _z);
-		PlayerPrefs.SetFloat("_orthoSize", _orthoSize);
+	//	PlayerPrefs.SetFloat("_orthoSize", _orthoSize);
 //        PlayerPrefs.SetFloat("_rot_x", _rot_x);
 //        PlayerPrefs.SetFloat("_rot_x", _rot_y);
 //        PlayerPrefs.SetFloat("_rot_x", _rot_z);
@@ -61,19 +62,19 @@ public class CameraController : MonoBehaviour {
 	void Update () {
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
-            _x += positionSpeed;
+			_x += rotationSpeed;
         else if (Input.GetKeyDown(KeyCode.RightArrow))
-            _x -= positionSpeed;
+			_x -= rotationSpeed;
 
 		if(Input.GetKeyDown(KeyCode.UpArrow))
-			_y +=  positionSpeed;
+			_y +=  rotationSpeed;
 		else if(Input.GetKeyDown(KeyCode.DownArrow))
-            _y -= positionSpeed;		
+			_y -= rotationSpeed;		
 
 		if(Input.GetKeyDown(KeyCode.Q))
-            _z += positionSpeed;
+			_z += rotationSpeed;
 		else if(Input.GetKeyDown(KeyCode.A))
-            _z -= positionSpeed;
+			_z -= rotationSpeed;
 
 
 
@@ -97,10 +98,10 @@ public class CameraController : MonoBehaviour {
 //        else if (Input.GetKeyDown(KeyCode.P))
 //            _field_of_view -= defaultFieldOfViewSpeed;
 
-		if (Input.GetKeyDown(KeyCode.O))
-			_orthoSize += defaultOrthoSizeSpeed;
-		else if (Input.GetKeyDown(KeyCode.P))
-			_orthoSize -= defaultOrthoSizeSpeed;
+	//	if (Input.GetKeyDown(KeyCode.O))
+	//		_orthoSize += defaultOrthoSizeSpeed;
+	//	else if (Input.GetKeyDown(KeyCode.P))
+	//		_orthoSize -= defaultOrthoSizeSpeed;
 
 //		if (myTransform.localPosition.y != _y)
 //            PlayerPrefs.SetFloat("_y", _y);
@@ -109,13 +110,13 @@ public class CameraController : MonoBehaviour {
 //        if (myTransform.localPosition.z != _z)
 //            PlayerPrefs.SetFloat("_z", _z);
 
-        myTransform.localPosition = defaultPos + new Vector3(_x, _y, _z);
-//        myTransform.localEulerAngles = new Vector3(defaultRot.x + _rot_x, defaultRot.y + _rot_y, defaultRot.z + _rot_z);
+//        myTransform.localPosition = defaultPos + new Vector3(_x, _y, _z);
+        myTransform.localEulerAngles = new Vector3(defaultRot.x + _x, defaultRot.y + _y, defaultRot.z + _z);
 
        // if (camera.fieldOfView != defaultFieldOfView + _field_of_view)
         //    camera.fieldOfView = defaultFieldOfView + _field_of_view;
 
-		GetComponent<Camera> ().orthographicSize = defaultOrthoSize + _orthoSize;
+		//GetComponent<Camera> ().orthographicSize = defaultOrthoSize + _orthoSize;
 
 	}
 }

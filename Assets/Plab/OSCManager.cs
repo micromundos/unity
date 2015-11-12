@@ -13,7 +13,7 @@ public class OSCManager : MonoBehaviour {
 	private List<MMTag>	_tags;
 	public List<MMTag> tags{
 
-		[MethodImpl(MethodImplOptions.Synchronized)]
+		//[MethodImpl(MethodImplOptions.Synchronized)]
 		get {return _tags;}
 
 
@@ -50,7 +50,7 @@ public class OSCManager : MonoBehaviour {
 
 	void OnPacketReceived(OSCServer server, OSCPacket packet)
 	{
-
+		//Debug.Log (packet.ToString());
 		_tags.Clear ();
 		if (packet.IsBundle ()) {
 			foreach (OSCMessage o in packet.Data) {
@@ -62,7 +62,6 @@ public class OSCManager : MonoBehaviour {
 					for(int i=0;i<t_len;i++){
 						make_tag(o,(i*tag_offset));
 					}
-				//	Debug.Log("Tag " + o.Data[0]);
 				}
 			}
 		}
@@ -124,23 +123,43 @@ public class OSCManager : MonoBehaviour {
 		}
 		Vector2[] normalized_corners = new Vector2[4];
 		Vector2 dir = new Vector2 ();
+
 		normalize_corners (_tag.corners, normalized_corners);
 		_tag.corners = normalized_corners;
 		tag_loc_normalized (_tag.corners, ref _tag.position);
 		tag_dir_from_corners (_tag.corners, ref dir);
-		Vector2 up = new Vector2 ();
-		up.Set (0.0f, 1.0f);
-		_tag.rotation = Vector2.Angle (dir, up);
+
+//		Vector2 up = new Vector2 ();
+//		up.Set (0.0f, 1.0f);
+
+		_tag.rotation = (Mathf.Atan2(dir.y, dir.x)*Mathf.Rad2Deg ) + 180;
+
 		tweak_loc (ref _tag.position);
-		_tag.position.x = Remap(_tag.position.x,0.0f,1.0f,-1.0f,1.0f);
-		_tag.position.y = Remap(_tag.position.y,0.0f,1.0f,1.0f,-1.0f);
+
+		_tag.position.x = Remap( _tag.position.x, 0.0f, 1.0f, -1.0f, 1.0f );
+		_tag.position.y = Remap( _tag.position.y, 0.0f, 1.0f, 1.0f, -1.0f );
+
 		_tags.Add (_tag);
+
+		//Debug.Log("Tag " + _tag.id);
 
 		/*tloc.x *= rgb_width;
       tloc.y *= rgb_height;
       tloc.set( tweak_H.preMult( ofVec3f( tloc.x, tloc.y, 0 ) ) );
       tloc.x /= rgb_width;
       tloc.y /= rgb_height;*/
+	}
+
+	Vector3 preMult( ref Matrix4x4 _mat, Vector3 v ) {
+
+		float d = 1.0f / (_mat[ix(0,3)] * v.x + _mat[ix(1,3)] * v.y + _mat[ix(2,3)] * v.z + _mat[ix(3,3)]) ;
+		return new Vector3( (_mat[ix(0,0)]*v.x + _mat[ix(1,0)]*v.y + _mat[ix(2,0)]*v.z + _mat[ix(3,0)])*d,
+		                   (_mat[ix(0,1)]*v.x + _mat[ix(1,1)]*v.y + _mat[ix(2,1)]*v.z + _mat[ix(3,1)])*d,
+		                   (_mat[ix(0,2)]*v.x + _mat[ix(1,2)]*v.y + _mat[ix(2,2)]*v.z + _mat[ix(3,2)])*d);
+	}
+	int ix(int row, int col)
+	{
+		return row + col * 4;
 	}
 
 	void	tweak_loc(ref Vector2	_loc)
@@ -150,7 +169,8 @@ public class OSCManager : MonoBehaviour {
 		Vector3 _point = new Vector3 ();
 		_point.x = _loc.x;
 		_point.y = _loc.y;
-		Vector3	_trans_point = calibration_loader.tags_matrix.MultiplyPoint(_point);
+		//Vector3	_trans_point = calibration_loader.tags_matrix.inverse.MultiplyVector(_point);
+		Vector3	_trans_point = preMult( ref calibration_loader.tags_matrix, _point );
 		_loc.x = _trans_point.x;
 		_loc.y = _trans_point.y;
 		_loc.x /= RGB_WIDTH;
