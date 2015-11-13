@@ -42,6 +42,7 @@ public class Car : MonoBehaviour
 		teletransportable = GetComponent<Teletransportable>();
 		GetComponentInChildren<SpriteRenderer>().sprite = sprites[id];
 		GetComponentInChildren<TrailRenderer>().material.color = colors[id];
+		speed = maxSpeed / 1.5f;
 	}
 	
 	public Vector3 lastPos;
@@ -144,7 +145,7 @@ public class Car : MonoBehaviour
 			teletransportable.SetOn(hit.transform.localPosition);
 			break;
 		case "Cinta":
-			forwardVector += hit.transform.up;
+			forwardVector += hit.transform.up*4;
 			//Vector3 pos = transform.position;
 			
 			//speed += (acceleration);

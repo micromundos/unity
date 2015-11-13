@@ -5,44 +5,33 @@ using System.Collections.Generic;
 public class SceneObject : MonoBehaviour {
 
     public bool inUse;
-	private List<int> rotations;
     public int id;
     public bool disableRotation;
 
-	void Start () {
-		Invoke ("UpdataState", 1);
-		rotations = new List<int> ();
-	}
-	void UpdataState()
-	{
-		Invoke ("UpdataState", 1);
-		int rotationNormal = 0;
-		int sumas = 0;
 
-		return;
-        if (disableRotation) return;
-
-        
-        else if (rotations.Count > 1)
-        {
-            foreach (int rot in rotations)
-                sumas += rot;
-            rotationNormal = sumas / rotations.Count;
-            transform.localEulerAngles = new Vector3(0, 0, rotationNormal);
-            rotations.Clear();
-        }
-	}
 	public void SetPosition(Vector3 pos)
 	{
 		if (tag == "River")
 			pos.z = 0;
-		transform.localPosition = pos;
+		//transform.localPosition = pos;
+		//return;
+		if (pos.x > 2) {
+			transform.localPosition = new Vector3(10,0,0); return;
+		}
+		Vector3 normPos = new Vector3 (pos.x, pos.y, pos.z);
+		transform.localPosition =  Vector3.Lerp(transform.localPosition,normPos , 0.5f);
+
+		//positions.Add(pos);
 	}
 	public void SetRotation(int rotation)
     {
-		if(tag !="DoblaRandom" && tag !="River")
-		transform.localEulerAngles = new Vector3(0, 0, -rotation);
-		//rotations.Add(rotation);
+		if (disableRotation)
+			return;
+
+		float f = Mathf.LerpAngle(transform.localEulerAngles.z, -rotation, 0.3f);
+		transform.localEulerAngles = new Vector3 (transform.localEulerAngles.x, transform.localEulerAngles.y, f);
+
+
     }
 
 }
