@@ -3,6 +3,10 @@ using System.Collections;
 
 public class TagsCalib : MonoBehaviour {
 
+	public float[] tags_matrix = new float[16];
+	private Vector3[] source = new Vector3[4];
+	private Vector3[] destination = new Vector3[4];
+
 	// Use this for initialization
 	void Start () {
 	
@@ -10,6 +14,17 @@ public class TagsCalib : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+//		Debug.Log("Source0: " + source[0]);
+//		Debug.Log("Dest0: " + destination[0]);
+//		Debug.Log("Source1: " + source[1]);
+//		Debug.Log("Dest1: " + destination[1]);
+//		Debug.Log("Source2: " + source[2]);
+//		Debug.Log("Dest2: " + destination[2]);
+//		Debug.Log("Source3: " + source[3]);
+//		Debug.Log("Dest3: " + destination[3]);
+//
+//		FindHomography(ref source, ref destination, ref matrix);
 	
 	}
 
