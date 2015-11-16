@@ -1,34 +1,75 @@
-﻿using UnityEngine;
+﻿	using UnityEngine;
 using System.Collections;
 
 public class TagsCalib : MonoBehaviour {
 
-	public float[] tags_matrix = new float[16];
-	private Vector3[] source = new Vector3[4];
-	private Vector3[] destination = new Vector3[4];
+	public CalibrationUI calib_ui;
+	public Matrix4x4 tags_matrix = new Matrix4x4();
+//	private float[] _tags_matrix = new float[16];
+	
+//	private Vector3[] source = new Vector3[4];
+//	private Vector3[] destination = new Vector3[4];
 
 	// Use this for initialization
 	void Start () {
-	
+		for (int i = 0; i < 16; i++)
+			tags_matrix[i] = PlayerPrefs.GetFloat ("tags_matrix_"+i,0);
+		Invoke ("saveData", 1);
+	}
+
+	void saveData()
+	{
+		for (int i = 0; i < 16; i++)
+			PlayerPrefs.SetFloat ("tags_matrix_"+i, tags_matrix[i]);
+		Invoke ("saveData", 1);
+	}
+
+	public bool isReady()
+	{
+		if (calib_ui.state == CalibrationUI.states.ON)
+			return false;
+
+		float a = 0;
+
+		for (int i = 0; i < 16; i++)
+			a += tags_matrix[i];
+
+		return a>0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-//		Debug.Log("Source0: " + source[0]);
-//		Debug.Log("Dest0: " + destination[0]);
-//		Debug.Log("Source1: " + source[1]);
-//		Debug.Log("Dest1: " + destination[1]);
-//		Debug.Log("Source2: " + source[2]);
-//		Debug.Log("Dest2: " + destination[2]);
-//		Debug.Log("Source3: " + source[3]);
-//		Debug.Log("Dest3: " + destination[3]);
-//
-//		FindHomography(ref source, ref destination, ref matrix);
+		if (Input.GetKeyDown (KeyCode.Z)) {
+			
+//			Debug.Log("==========================");
+//			
+//			Debug.Log("Source 0: " + calib_ui.src_pts[0]);
+//			Debug.Log("Dest 0: " + calib_ui.dst_pts[0]);
+//			
+//			Debug.Log("Source 1: " + calib_ui.src_pts[1]);
+//			Debug.Log("Dest 1: " + calib_ui.dst_pts[1]);
+//			
+//			Debug.Log("Source 2: " + calib_ui.src_pts[2]);
+//			Debug.Log("Dest 2: " + calib_ui.dst_pts[2]);
+//			
+//			Debug.Log("Source 3: " + calib_ui.src_pts[3]);
+//			Debug.Log("Dest 3: " + calib_ui.dst_pts[3]);
+			
+			FindHomography( calib_ui.dst_pts.ToArray(), calib_ui.src_pts.ToArray(), ref tags_matrix );
+
+//			for (int i = 0; i < 16; i++) 
+//				tags_matrix[i] = _tags_matrix[i];
+			
+//			Debug.Log("Homography: " + tags_matrix);
+//			
+//			Debug.Log("==========================");
+		}
 	
 	}
 
-	void FindHomography(ref Vector3[] src, ref Vector3[] dest, ref float[] homography) 
+//	void FindHomography( Vector3[] src, Vector3[] dest, ref float[] homography ) 
+	void FindHomography( Vector3[] src, Vector3[] dest, ref Matrix4x4 homography ) 
 	{
 		// originally by arturo castro - 08/01/2010  
 		//  

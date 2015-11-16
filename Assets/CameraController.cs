@@ -20,15 +20,15 @@ public class CameraController : MonoBehaviour {
 
 	private float varsSpeed=0.01f;
 
-	public float var1_;
-	public float var2_;
-	public float var3_;
-	public float var4_;
-
-	public float var1;
-	public float var2;
-	public float var3;
-	public float var4;
+//	public float var1_;
+//	public float var2_;
+//	public float var3_;
+//	public float var4_;
+//
+//	public float var1;
+//	public float var2;
+//	public float var3;
+//	public float var4;
 
 
     private float _x;
@@ -160,6 +160,17 @@ public class CameraController : MonoBehaviour {
 		else if(Input.GetKeyDown(KeyCode.G))
 //			var4_ -= varsSpeed;
 			frustum_displace_vert -= frustum_speed;
+
+
+		if (Input.GetKeyDown (KeyCode.P)) {
+			_x = 0;
+			_y = 0;
+			_z = 0;
+			frustum_stretch_hor = 0;
+			frustum_displace_hor = 0;
+			frustum_stretch_vert = 0;
+			frustum_displace_vert = 0;
+		}
 
 
 //		calibration.tags_matrix.m00 = var1_ + var1;

@@ -14,8 +14,8 @@ public class CalibrationUI : MonoBehaviour {
     public GameObject corner3;
     public GameObject corner4;
 
-    public List<Vector2> originalPoints;
-    public List<Vector2> calibratedPoints;
+    public List<Vector3> src_pts;
+    public List<Vector3> dst_pts;
 
     public states state;
     public PController controller;
@@ -29,17 +29,17 @@ public class CalibrationUI : MonoBehaviour {
 	void Start () {
         state = states.ON;
 
-        calibratedPoints = new List<Vector2>();
+        dst_pts = new List<Vector3>();
 
         for (int a = 0; a < 4; a++)
         {
-            originalPoints.Add(Vector2.zero);
-            calibratedPoints.Add(Vector2.zero);
+            src_pts.Add(Vector3.zero);
+            dst_pts.Add(Vector3.zero);
         }
-        originalPoints[0] = corner1.transform.position;
-        originalPoints[1] = corner2.transform.position;
-        originalPoints[2] = corner3.transform.position;
-        originalPoints[3] = corner4.transform.position;
+        src_pts[0] = corner1.transform.localPosition;
+		src_pts[1] = corner2.transform.localPosition;
+		src_pts[2] = corner3.transform.localPosition;
+		src_pts[3] = corner4.transform.localPosition;
 
 	}
 
@@ -57,18 +57,20 @@ public class CalibrationUI : MonoBehaviour {
                 else if (data.id == TAG_3_ID) SetPosition(3, data.position);
                 else if (data.id == TAG_4_ID) SetPosition(4, data.position);
             }
-            if (Input.GetKeyDown(KeyCode.Z))
-                Ready();
+//            if (Input.GetKeyDown(KeyCode.Z))
+//                Ready();
         }
     }
-    void Ready()
-    {
-        print("READY");
-        ToogleState();
-    }
+
+//    void Ready()
+//    {
+//        print("READY");
+//        ToogleState();
+//    }
+
     void SetPosition(int id, Vector2 pos)
     {
-        calibratedPoints[id-1] =  pos;
+        dst_pts[id-1] =  pos;
     }
     void ToogleState()
     {

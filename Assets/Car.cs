@@ -46,6 +46,7 @@ public class Car : MonoBehaviour
 	}
 	
 	public Vector3 lastPos;
+	private bool started;
 	void Update()
 	{
 		collision_RIGHT = false;
@@ -81,22 +82,26 @@ public class Car : MonoBehaviour
 		
 		CheckCenterHit(frontPosition, Color.red);
 
-		if (realSpeed < 0.08f && pendiente > 0) {
-			turn(180);
-			return;
-		}
-		if (collision_FORWARD) {
-			 if (collision_RIGHT)
+		if (started) {
+			if (realSpeed < 0.08f && pendiente > 0) {
+				turn (180);
+				return;
+			}
+			if (collision_FORWARD) {
+				if (collision_RIGHT)
+					turn (-20);
+				else if (collision_LEFT)
+					turn (20);
+				if (speed > 0.15)
+					speed /= 1.4f;
+			} else
+		if (collision_RIGHT)
 				turn (-20);
 			else if (collision_LEFT)
 				turn (20);
-			if(speed > 0.15)
-				speed/=1.4f;
-		} else
-		if (collision_RIGHT)
-			turn (-20);
-		else if (collision_LEFT)
-			turn (20);
+		}
+
+		started = true;
 	}
 	string lastHitObjectTag;
 	void CheckCenterHit(Vector3 coord, Color _DebugColor)
@@ -219,7 +224,6 @@ public class Car : MonoBehaviour
 	}
 	private void turn(float _y)
 	{
-		//return;
 		Vector3 angles = transform.localEulerAngles;
 			angles.z += _y;
 		transform.localEulerAngles = angles;

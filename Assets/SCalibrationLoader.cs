@@ -7,9 +7,13 @@ public class SCalibrationLoader : MonoBehaviour {
 	// Use this for initialization
 	///Users/micromundos/dev/of/apps/micromundos/data/calib
 	const string	data_path = "/Users/micromundos/dev/of/apps/micromundos/data/calib/";
-	public Matrix4x4	tags_matrix;
+
+	public Matrix4x4	tags_matrix_cv;
+	public Matrix4x4	tags_matrix_gl;
+
 	public Matrix4x4	cl_projection_matrix;
 	public Matrix4x4	cl_model_view_matrix;
+
 	public	bool	ready = false;
 	public float depth_cam_width;
 	public float depth_cam_height;
@@ -29,28 +33,50 @@ public class SCalibrationLoader : MonoBehaviour {
 	public Vector3 proj_left;
 
 	void Start () {
-		tags_matrix = new Matrix4x4 ();
+
+		tags_matrix_cv = new Matrix4x4 ();
+		tags_matrix_gl = new Matrix4x4 ();
+
 		cl_projection_matrix = new Matrix4x4 ();
 		StreamReader tags_calib_stream = File.OpenText (data_path + "unity_tags.yml");
 		string tags_calib_string = tags_calib_stream.ReadToEnd ();
+
 		//	tags
 		string[] lines = tags_calib_string.Split ('\n');
-		tags_matrix [0, 0] = float_from_line (lines [1]);
-		tags_matrix [1, 0] = float_from_line (lines [2]);
-		tags_matrix [2, 0] = float_from_line (lines [3]);
-		tags_matrix [3, 0] = 0.0f;
-		tags_matrix [0, 1] = float_from_line (lines [4]);
-		tags_matrix [1, 1] = float_from_line (lines [5]);
-		tags_matrix [2, 1] = float_from_line (lines [6]);
-		tags_matrix [3, 1] = 0.0f;
-		tags_matrix [0, 2] = float_from_line (lines [7]);
-		tags_matrix [1, 2] = float_from_line (lines [8]);
-		tags_matrix [2, 2] = float_from_line (lines [9]);
-		tags_matrix [3, 2] = 0.0f;
-		tags_matrix [0, 3] = 0.0f;
-		tags_matrix [1, 3] = 0.0f;
-		tags_matrix [2, 3] = 0.0f;
-		tags_matrix [3, 3] = 1.0f;
+		tags_matrix_cv [0, 0] = float_from_line (lines [1]);
+		tags_matrix_cv [1, 0] = float_from_line (lines [2]);
+		tags_matrix_cv [2, 0] = float_from_line (lines [3]);
+		tags_matrix_cv [3, 0] = 0.0f;
+		tags_matrix_cv [0, 1] = float_from_line (lines [4]);
+		tags_matrix_cv [1, 1] = float_from_line (lines [5]);
+		tags_matrix_cv [2, 1] = float_from_line (lines [6]);
+		tags_matrix_cv [3, 1] = 0.0f;
+		tags_matrix_cv [0, 2] = float_from_line (lines [7]);
+		tags_matrix_cv [1, 2] = float_from_line (lines [8]);
+		tags_matrix_cv [2, 2] = float_from_line (lines [9]);
+		tags_matrix_cv [3, 2] = 0.0f;
+		tags_matrix_cv [0, 3] = 0.0f;
+		tags_matrix_cv [1, 3] = 0.0f;
+		tags_matrix_cv [2, 3] = 0.0f;
+		tags_matrix_cv [3, 3] = 1.0f;
+
+		tags_matrix_gl [0,0] = float_from_line (lines [10]);
+		tags_matrix_gl [1,0] = float_from_line (lines [11]);
+		tags_matrix_gl [2,0] = float_from_line (lines [12]);
+		tags_matrix_gl [3,0] = float_from_line (lines [13]);
+		tags_matrix_gl [0,1] = float_from_line (lines [14]);
+		tags_matrix_gl [1,1] = float_from_line (lines [15]);
+		tags_matrix_gl [2,1] = float_from_line (lines [16]);
+		tags_matrix_gl [3,1] = float_from_line (lines [17]);
+		tags_matrix_gl [0,2] = float_from_line (lines [18]);
+		tags_matrix_gl [1,2] = float_from_line (lines [19]);
+		tags_matrix_gl [2,2] = float_from_line (lines [20]);
+		tags_matrix_gl [3,2] = float_from_line (lines [21]);
+		tags_matrix_gl [0,3] = float_from_line (lines [22]);
+		tags_matrix_gl [1,3] = float_from_line (lines [23]);
+		tags_matrix_gl [2,3] = float_from_line (lines [24]);
+		tags_matrix_gl [3,3] = float_from_line (lines [25]);
+
 		//	camara lucida
 		StreamReader cl_calib_stream = File.OpenText (data_path + "unity_cml.yml");
 		string cl_calib_string = cl_calib_stream.ReadToEnd ();

@@ -58,7 +58,7 @@
          		lerp2d( height, 0.0, 0.6, _Color.r, _Color2.r ),
          		lerp2d( height, 0.0, 0.6, _Color.g, _Color2.g ),
          		lerp2d( height, 0.0, 0.6, _Color.b, _Color2.b ),
-         		height > 0.02 ? 1.0 : 0.0
+         		height > 0.015 ? 1.0 : 0.0
          	);
    			//render_color = vec4(_Color.r, _Color.g, _Color.b, height > 0.02 ? 1.0 : 0.0);
          	
