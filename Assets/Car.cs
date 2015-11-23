@@ -28,9 +28,12 @@ public class Car : MonoBehaviour
 	private Teletransportable teletransportable;
 	
 	private Vector3 forwardVector;
+
+	public int id;
 	
 	public void Init(int id)
 	{
+		this.id = id;
 		pendienteFrena= GameManager.Instance.settings.pendienteFrena;
 		surfaceMaxHeight = GameManager.Instance.settings.surfaceMaxHeight;
 		pendiente_Speed = GameManager.Instance.settings.pendiente_Speed;
@@ -49,6 +52,13 @@ public class Car : MonoBehaviour
 	private bool started;
 	void Update()
 	{
+		if(Mathf.Abs(transform.localPosition.x)>6
+		  ||
+		   Mathf.Abs(transform.localPosition.y)>6 )
+		{
+			Events.DestroyCar(this);
+			return;
+		}
 		collision_RIGHT = false;
 		collision_FORWARD = false;
 		collision_LEFT = false;
@@ -57,6 +67,7 @@ public class Car : MonoBehaviour
 		//if (Mathf.Abs(pos.x) > 4 || Mathf.Abs(pos.y) > 4 ) Events.DestroyCar(this);
 		
 		Vector3 frontPosition = pos;
+
 		frontPosition += transform.forward / 10;
 		
 		Vector3 leftPosition = (pos + transform.up / 10) + transform.right / 7;
@@ -111,12 +122,21 @@ public class Car : MonoBehaviour
 		RaycastHit hit = GetCollision(coord, "center");
 		
 		forwardVector = transform.up * speed;
-		
+
 		if (hit.transform == null) return;
+
 		
 		
 		switch (hit.transform.gameObject.tag)
 		{
+		case "Counter":
+			Counter counter = hit.transform.gameObject.GetComponent<Counter>();
+			if(counter.CarId-1 == id)
+			{
+				counter.Add();
+				Events.DestroyCar(this);
+			}
+			break;
 		case "Bomb":
 			speed *=10;
 			//Events.DestroyCar(this);
@@ -189,14 +209,14 @@ public class Car : MonoBehaviour
 				float pixelHeight = GameManager.Instance.GetFloorHeight(hit);
 				//	print ("Pixel hiehgt:  " +  pixelHeight +  "    pos:  " + transform.position);
 				changeFloorHeight(pixelHeight, positionName);
-			}
-			else hitToReturn = hit;
+			} else if (hit.transform.gameObject.tag != "Untagged")
+				return hit;
+			//else hitToReturn = hit;
 		}
 		return hitToReturn;
 	}
 	void changeFloorHeight(float checkingFloorHeight, string positionName)
 	{
-		
 		if (positionName == "center")
 		{
 			floorHeight = checkingFloorHeight;

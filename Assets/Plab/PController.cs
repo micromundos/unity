@@ -52,6 +52,8 @@ public class PController : MonoBehaviour {
             case 13: tag = "Bomb"; break;
             case 14: tag = "River"; break;
 			case 15: tag = "River"; break;
+			case 16: tag = "Counter"; break;
+			case 17: tag = "Counter"; break;
         }
         return tag;
     }
