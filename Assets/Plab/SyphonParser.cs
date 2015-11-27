@@ -32,7 +32,7 @@ public class SyphonParser : MonoBehaviour {
 				RenderTexture currentActiveRT = RenderTexture.active;
 				RenderTexture.active = texture;
 				if(surface_map == null){
-					Debug.Log("ALOCO");
+//					Debug.Log("ALOCO");
 					surface_map = new Texture2D (texture.width, texture.height);
 				}
 				//Debug.Log (texture.width + " , " + texture.height);

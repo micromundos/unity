@@ -33,11 +33,34 @@ Shader "Custom/CamaraLucidaShader" {
 		 
 		 float unity_plane_z_offset = 1000.0;
 		 
+		 mat4 transform = mat4(	0.00232101, 	9.71977e-05, 	0.0, 	0.0,  // 1. column
+                  				-2.38543e-05, 	0.00317804, 	0.0, 	0.0,  // 2. column
+                  				3.312e-05, 		3.25951e-05, 	0.0, 	0.0,  // 3. column
+                  				-0.244142, 		-0.368346, 		0.0, 	1.0); // 4. column
+                  				
+//         mat4 transform = mat4(	0.00232101, -2.38543e-05, 3.312e-05, -0.244142,  	// 1. column
+//                  				9.71977e-05, 0.00317804, 3.25951e-05, -0.368346, 	// 2. column
+//                  				0.0,        0.0,        0.0,        0.0,  			// 3. column
+//                  				0.0,        0.0,        0.0,        1.0); 			// 4. column
+		 
+//		0.00232101, -2.38543e-05, 3.312e-05, -0.244142
+//		9.71977e-05, 0.00317804, 3.25951e-05, -0.368346
+//      0,        0,        0,        0
+//      0,        0,        0,        1
+		 
 //		 varying vec3 p3;
 		 
 		 vec3 unproject( vec2 p2, float z ) 
 		 {
+//		 	camara lucida:
 		 	return vec3((p2.x + xoff - cx) * z / fx, (p2.y - cy) * z / fy, z);
+
+//		 	ofxReprojection:			
+//		 	vec4 p3 = vec4( p2.x * 4./3., p2.y, z, 1.0 );
+//		 	vec4 p3 = vec4( p2.x, p2.y, z, 1.0 );
+//		 	p3 = p3 * transform;
+//			p3.z = z;
+//			return vec3(p3);
 		 }
 		 
  		 float lerp2d( float x, float x1, float x2, float y1, float y2 ) 

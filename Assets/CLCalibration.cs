@@ -20,14 +20,15 @@ public class CLCalibration : MonoBehaviour {
 			calib_applied = true;
 			//Debug.Log("MATRIX " + GetComponent<Camera>().projectionMatrix.ToString());
 
-			GetComponent<Camera>().projectionMatrix = calibration_loader.cl_projection_matrix;
+//			GetComponent<Camera>().projectionMatrix = calibration_loader.cl_projection_matrix;
+
 			//GL.modelview = calibration_loader.cl_model_view_matrix;
 			//GetComponent<Camera>().worldToCameraMatrix = calibration_loader.cl_model_view_matrix;
 			//GetComponent<Camera>().transform.
 
 //			calibration_loader.proj_loc.x *= -1;
 //			calibration_loader.proj_loc.y *= -1;
-			GetComponent<Camera>().transform.position = calibration_loader.proj_loc;
+//			GetComponent<Camera>().transform.position = calibration_loader.proj_loc;
 //			GetComponent<Camera>().transform.position = new Vector3(
 //				calibration_loader.cl_model_view_matrix[12],
 //				calibration_loader.cl_model_view_matrix[13],

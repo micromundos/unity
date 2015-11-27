@@ -45,7 +45,7 @@ public class Car : MonoBehaviour
 		teletransportable = GetComponent<Teletransportable>();
 		GetComponentInChildren<SpriteRenderer>().sprite = sprites[id];
 		GetComponentInChildren<TrailRenderer>().material.color = colors[id];
-		speed = maxSpeed / 1.5f;
+		speed = maxSpeed / 2.1f;
 	}
 	
 	public Vector3 lastPos;
@@ -68,15 +68,15 @@ public class Car : MonoBehaviour
 		
 		Vector3 frontPosition = pos;
 
-		frontPosition += transform.forward / 10;
+		frontPosition += transform.forward / 50;
 		
-		Vector3 leftPosition = (pos + transform.up / 10) + transform.right / 7;
+		Vector3 leftPosition = (pos + transform.up / 50) + transform.right / 35;
 		CheckBorderHit(leftPosition, Color.blue, "left");
 		
-		Vector3 rightPosition = (pos + transform.up / 10) - transform.right / 7;
+		Vector3 rightPosition = (pos + transform.up / 50) - transform.right / 35;
 		CheckBorderHit(rightPosition, Color.green, "right");
 		
-		Vector3 forwardPosition = pos + transform.up / 4;
+		Vector3 forwardPosition = pos + transform.up / 20;
 		CheckBorderHit(forwardPosition, Color.green, "forward");
 		
 		speed += (acceleration);
@@ -196,14 +196,13 @@ public class Car : MonoBehaviour
 		if (hits.Length == 0)
 			return new RaycastHit();
 		
-		
 		RaycastHit hitToReturn = hits[0];
 		for (int i = 0; i < hits.Length; i++)
 		{
 			RaycastHit hit = hits[i];
 			Renderer rend = hit.transform.GetComponent<Renderer>();
 			//	Debug.Log(hit.transform.gameObject.name);
-			if (hit.transform.gameObject.name == "SyphonReceiver")
+			if (hit.transform.gameObject.name == "MicromundosSurfaceSyphon")
 			{
 				//Debug.Log(GameManager.Instance.GetFloorHeight(hit));
 				float pixelHeight = GameManager.Instance.GetFloorHeight(hit);
@@ -219,13 +218,17 @@ public class Car : MonoBehaviour
 	{
 		if (positionName == "center")
 		{
+
 			floorHeight = checkingFloorHeight;
+
 		}
 
 			if (positionName == "forward")
 			{
-				pendiente = checkingFloorHeight - floorHeight;
+				
 				speed -= (pendiente/pendienteFrena) * pendiente_Speed;
+				pendiente = checkingFloorHeight - floorHeight;
+				print (pendiente);
 			}
 		float heightDifference = Mathf.Abs(floorHeight - checkingFloorHeight);
 			//Debug.Log ("pendiente: " + pendiente + "  heightDifference:  " + heightDifference);
