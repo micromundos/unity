@@ -62,33 +62,32 @@ public class CameraOrtographicController : MonoBehaviour {
 				return;
 			
 			if (Input.GetKeyDown(KeyCode.UpArrow))
-				_x += speed;
+				_y -= speed;
 			else if (Input.GetKeyDown(KeyCode.DownArrow))
-			_x -= speed;
+				_y += speed;
 			
 			if(Input.GetKeyDown(KeyCode.LeftArrow))
-			_y +=  speed;
+				_x +=  speed;
 			else if(Input.GetKeyDown(KeyCode.RightArrow))
-			_y -= speed;		
+				_x -= speed;		
 			
 			// Q-A ROTACION EJE Z
 			if(Input.GetKeyDown(KeyCode.Q))
-			_rot_z += speedRotation;
+				_rot_z += speedRotation;
 			else if(Input.GetKeyDown(KeyCode.A))
-			_rot_z -= speedRotation;
+				_rot_z -= speedRotation;
 			
 			// W-S FRUSTUM STRETCH HORIZONTAL
 			if (Input.GetKeyDown (KeyCode.W))
-			_orthoSize += orthoSizeSpeed;
+				_orthoSize += orthoSizeSpeed;
 			else if(Input.GetKeyDown(KeyCode.S))
-			_orthoSize -= orthoSizeSpeed;
-			;
+				_orthoSize -= orthoSizeSpeed;
 			
 			
 			if (Input.GetKeyDown (KeyCode.P)) {
-				_x = defaultPos.x;
-				_y = defaultPos.y;
-				_orthoSize = defaultOrthoSize;
+				_x = 0;
+				_y = 0;
+				_orthoSize = 0;
 				_rot_z = 0;
 			}
 			
@@ -109,8 +108,8 @@ public class CameraOrtographicController : MonoBehaviour {
 			//        if (myTransform.localPosition.z != _z)
 			//            PlayerPrefs.SetFloat("_z", _z);
 			
-			        myTransform.localPosition = defaultPos + new Vector3(_x, _y, 0);
-				myTransform.localEulerAngles = new Vector3(0,0, _rot_z);
+			myTransform.localPosition = defaultPos + new Vector3(_x, _y, 0);
+			myTransform.localEulerAngles = new Vector3(0,0, _rot_z);
 			
 			// if (camera.fieldOfView != defaultFieldOfView + _field_of_view)
 			//    camera.fieldOfView = defaultFieldOfView + _field_of_view;

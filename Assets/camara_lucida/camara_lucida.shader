@@ -53,14 +53,14 @@ Shader "Custom/CamaraLucidaShader" {
 		 vec3 unproject( vec2 p2, float z ) 
 		 {
 //		 	camara lucida:
-		 	return vec3((p2.x + xoff - cx) * z / fx, (p2.y - cy) * z / fy, z);
+//		 	return vec3((p2.x + xoff - cx) * z / fx, (p2.y - cy) * z / fy, z);
 
 //		 	ofxReprojection:			
-//		 	vec4 p3 = vec4( p2.x * 4./3., p2.y, z, 1.0 );
+		 	vec4 p3 = vec4( p2.x * 4./3., p2.y, z, 1.0 );
 //		 	vec4 p3 = vec4( p2.x, p2.y, z, 1.0 );
-//		 	p3 = p3 * transform;
-//			p3.z = z;
-//			return vec3(p3);
+		 	p3 = p3 * transform;
+			p3.z = z;
+			return vec3(p3);
 		 }
 		 
  		 float lerp2d( float x, float x1, float x2, float y1, float y2 ) 
